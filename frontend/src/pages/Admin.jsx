@@ -2,271 +2,406 @@ import { useState } from 'react'
 import Header from '../components/Header'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-
 import '../css/admin.css'
 
 function Admin() {
-
   const [product, setProduct] = useState({
     name: '',
-    category: '',
-    subcategory: '',
+    description: '',
     price: '',
     stock: '',
-    description: '',
+    category: '',
+    subcategory: '',
     brand: '',
     model: '',
+    year: '',
     color: '',
     storage: '',
     screen: '',
+    connector: '',
+    sim: ''
   })
 
-  const handleChange = (e) => {
-    const { name, value } = e.target
+  const [message, setMessage] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
 
-    setProduct({
-      ...product,
-      [name]: value
+  const categories = {
+    Smartphone: [
+      'iPhone',
+      'Samsung',
+      'Google Pixel',
+      'Xiaomi'
+    ],
+    'Ordinateur portable': [
+      'MacBook',
+      'PC portable',
+      'PC gaming'
+    ],
+    Tablette: [
+      'iPad',
+      'Samsung Galaxy Tab',
+      'Lenovo Tab'
+    ],
+    Console: [
+      'PlayStation',
+      'Xbox',
+      'Nintendo'
+    ],
+    'Montre connectée': [
+      'Apple Watch',
+      'Samsung Galaxy Watch',
+      'Garmin'
+    ]
+  }
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+
+    setProduct((prev) => {
+      const updatedProduct = {
+        ...prev,
+        [name]: value
+      }
+
+      // Si la catégorie change, on réinitialise la sous-catégorie
+      if (name === 'category') {
+        updatedProduct.subcategory = ''
+      }
+
+      return updatedProduct
     })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const generateSlug = (name) => {
+    return name
+      .toLowerCase()
+      .trim()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  }
 
-    console.log('Produit à créer :', product)
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    setMessage('')
+    setError('')
+    setLoading(true)
+
+    const productData = {
+      name: product.name,
+      slug: generateSlug(product.name),
+      description: product.description,
+
+      // Prix en centimes
+      // Exemple : 899.99 € → 89999
+      price: Math.round(Number(product.price) * 100),
+
+      stock: Number(product.stock),
+
+      // Catégorie
+      category: product.category,
+      subcategory: product.subcategory,
+
+      // Informations produit
+      brand: product.brand,
+      model: product.model,
+      year: Number(product.year),
+      color: product.color,
+
+      // Caractéristiques
+      storage: product.storage,
+      screen: product.screen,
+      connector: product.connector,
+      sim: product.sim
+    }
+
+    try {
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify(productData)
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || 'Impossible de créer le produit.'
+        )
+      }
+
+      setMessage('Produit créé avec succès !')
+
+      console.log('Produit créé :', data.product)
+
+      // Réinitialiser le formulaire
+      setProduct({
+        name: '',
+        description: '',
+        price: '',
+        stock: '',
+        category: '',
+        subcategory: '',
+        brand: '',
+        model: '',
+        year: '',
+        color: '',
+        storage: '',
+        screen: '',
+        connector: '',
+        sim: ''
+      })
+    } catch (error) {
+      console.error(error)
+
+      setError(
+        error.message || 'Une erreur est survenue lors de la création.'
+      )
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <div className="admin">
-
       <Header />
 
       <Navbar />
 
       <main className="admin-page">
 
-        <div className="admin-header">
+        <div className="admin-title">
           <h1>Administration</h1>
-          <p>Créer et gérer les produits Reboot.</p>
+          <p>Ajouter un nouveau produit</p>
         </div>
 
-        <section className="admin-product">
+        <form
+          className="admin-form"
+          onSubmit={handleSubmit}
+        >
 
-          <div className="admin-product-header">
-            <h2>Créer une fiche produit</h2>
-            <p>
-              Ajoutez les informations du produit qui sera affiché
-              dans le catalogue.
-            </p>
-          </div>
+          {/* INFORMATIONS GÉNÉRALES */}
 
-          <form onSubmit={handleSubmit}>
+          <section className="admin-section">
 
-            {/* INFORMATIONS GÉNÉRALES */}
+            <h2>Informations générales</h2>
 
-            <div className="admin-section">
+            <div className="form-group">
 
-              <h3>Informations générales</h3>
+              <label htmlFor="name">
+                Nom du produit
+              </label>
 
-              <div className="admin-grid">
-
-                <div className="admin-field">
-                  <label>Nom du produit</label>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Ex : iPhone 17"
-                    value={product.name}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="admin-field">
-                  <label>Marque</label>
-                  <input
-                    type="text"
-                    name="brand"
-                    placeholder="Ex : Apple"
-                    value={product.brand}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="admin-field">
-                  <label>Modèle</label>
-                  <input
-                    type="text"
-                    name="model"
-                    placeholder="Ex : iPhone 17"
-                    value={product.model}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="admin-field">
-                  <label>Prix (€)</label>
-                  <input
-                    type="number"
-                    name="price"
-                    placeholder="899"
-                    value={product.price}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="admin-field">
-                  <label>Stock</label>
-                  <input
-                    type="number"
-                    name="stock"
-                    placeholder="10"
-                    value={product.stock}
-                    onChange={handleChange}
-                  />
-                </div>
-
-              </div>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value={product.name}
+                onChange={handleChange}
+                placeholder="Ex : iPhone 17"
+                required
+              />
 
             </div>
 
+            <div className="form-group">
 
-            {/* CATÉGORIE */}
+              <label htmlFor="description">
+                Description
+              </label>
 
-            <div className="admin-section">
-
-              <h3>Catégorie</h3>
-
-              <div className="admin-grid">
-
-                <div className="admin-field">
-                  <label>Catégorie</label>
-
-                  <select
-                    name="category"
-                    value={product.category}
-                    onChange={handleChange}
-                  >
-                    <option value="">Sélectionner une catégorie</option>
-                    <option value="smartphone">Smartphone</option>
-                    <option value="ordinateur">Ordinateur portable</option>
-                    <option value="tablette">Tablette</option>
-                    <option value="console">Console</option>
-                    <option value="montre">Montre connectée</option>
-                  </select>
-
-                </div>
-
-                <div className="admin-field">
-                  <label>Sous-catégorie</label>
-
-                  <select
-                    name="subcategory"
-                    value={product.subcategory}
-                    onChange={handleChange}
-                  >
-                    <option value="">Sélectionner une sous-catégorie</option>
-                    <option value="iphone">iPhone</option>
-                    <option value="samsung">Samsung</option>
-                    <option value="google-pixel">Google Pixel</option>
-                    <option value="macbook">MacBook</option>
-                    <option value="windows">Windows</option>
-                    <option value="gaming">Gaming</option>
-                  </select>
-
-                </div>
-
-              </div>
+              <textarea
+                id="description"
+                name="description"
+                value={product.description}
+                onChange={handleChange}
+                placeholder="Description du produit"
+                required
+              />
 
             </div>
 
-
-            {/* CARACTÉRISTIQUES */}
-
-            <div className="admin-section">
-
-              <h3>Caractéristiques</h3>
-
-              <div className="admin-grid">
-
-                <div className="admin-field">
-                  <label>Couleur</label>
-
-                  <input
-                    type="text"
-                    name="color"
-                    placeholder="Ex : Noir"
-                    value={product.color}
-                    onChange={handleChange}
-                  />
-
-                </div>
-
-                <div className="admin-field">
-                  <label>Stockage</label>
-
-                  <input
-                    type="text"
-                    name="storage"
-                    placeholder="Ex : 256 Go"
-                    value={product.storage}
-                    onChange={handleChange}
-                  />
-
-                </div>
-
-                <div className="admin-field">
-                  <label>Taille d'écran</label>
-
-                  <input
-                    type="text"
-                    name="screen"
-                    placeholder='Ex : 6.3"'
-                    value={product.screen}
-                    onChange={handleChange}
-                  />
-
-                </div>
-
-              </div>
-
-            </div>
+          </section>
 
 
-            {/* DESCRIPTION */}
+          {/* CATÉGORIE */}
 
-            <div className="admin-section">
+          <section className="admin-section">
 
-              <h3>Description</h3>
+            <h2>Catégorie</h2>
 
-              <div className="admin-field">
+            <div className="form-row">
 
-                <textarea
-                  name="description"
-                  placeholder="Décrivez le produit..."
-                  value={product.description}
+              <div className="form-group">
+
+                <label htmlFor="category">
+                  Catégorie
+                </label>
+
+                <select
+                  id="category"
+                  name="category"
+                  value={product.category}
                   onChange={handleChange}
-                  rows="7"
-                />
+                  required
+                >
+                  <option value="">
+                    Sélectionner une catégorie
+                  </option>
+
+                  {Object.keys(categories).map((category) => (
+                    <option
+                      key={category}
+                      value={category}
+                    >
+                      {category}
+                    </option>
+                  ))}
+
+                </select>
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label htmlFor="subcategory">
+                  Sous-catégorie
+                </label>
+
+                <select
+                  id="subcategory"
+                  name="subcategory"
+                  value={product.subcategory}
+                  onChange={handleChange}
+                  disabled={!product.category}
+                  required
+                >
+                  <option value="">
+                    Sélectionner une sous-catégorie
+                  </option>
+
+                  {product.category &&
+                    categories[product.category].map(
+                      (subcategory) => (
+                        <option
+                          key={subcategory}
+                          value={subcategory}
+                        >
+                          {subcategory}
+                        </option>
+                      )
+                    )}
+
+                </select>
 
               </div>
 
             </div>
 
+          </section>
 
-            {/* IMAGES */}
 
-            <div className="admin-section">
+          {/* PRIX ET STOCK */}
 
-              <h3>Images</h3>
+          <section className="admin-section">
 
-              <div className="admin-upload">
+            <h2>Prix et stock</h2>
 
-                <span>Ajouter les images du produit</span>
+            <div className="form-row">
+
+              <div className="form-group">
+
+                <label htmlFor="price">
+                  Prix (€)
+                </label>
 
                 <input
-                  type="file"
-                  multiple
-                  accept="image/*"
+                  id="price"
+                  name="price"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={product.price}
+                  onChange={handleChange}
+                  placeholder="899.99"
+                  required
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label htmlFor="stock">
+                  Stock
+                </label>
+
+                <input
+                  id="stock"
+                  name="stock"
+                  type="number"
+                  min="0"
+                  value={product.stock}
+                  onChange={handleChange}
+                  placeholder="10"
+                  required
+                />
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* INFORMATIONS PRODUIT */}
+
+          <section className="admin-section">
+
+            <h2>Informations produit</h2>
+
+            <div className="form-row">
+
+              <div className="form-group">
+
+                <label htmlFor="brand">
+                  Marque
+                </label>
+
+                <input
+                  id="brand"
+                  name="brand"
+                  type="text"
+                  value={product.brand}
+                  onChange={handleChange}
+                  placeholder="Apple"
+                  required
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label htmlFor="model">
+                  Modèle
+                </label>
+
+                <input
+                  id="model"
+                  name="model"
+                  type="text"
+                  value={product.model}
+                  onChange={handleChange}
+                  placeholder="iPhone 17"
+                  required
                 />
 
               </div>
@@ -274,29 +409,170 @@ function Admin() {
             </div>
 
 
-            {/* ACTIONS */}
+            <div className="form-row">
 
-            <div className="admin-actions">
+              <div className="form-group">
 
-              <button
-                type="button"
-                className="admin-cancel"
-              >
-                Annuler
-              </button>
+                <label htmlFor="year">
+                  Année
+                </label>
 
-              <button
-                type="submit"
-                className="admin-submit"
-              >
-                Créer le produit
-              </button>
+                <input
+                  id="year"
+                  name="year"
+                  type="number"
+                  value={product.year}
+                  onChange={handleChange}
+                  placeholder="2026"
+                  required
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label htmlFor="color">
+                  Couleur
+                </label>
+
+                <input
+                  id="color"
+                  name="color"
+                  type="text"
+                  value={product.color}
+                  onChange={handleChange}
+                  placeholder="Noir"
+                  required
+                />
+
+              </div>
 
             </div>
 
-          </form>
+          </section>
 
-        </section>
+
+          {/* CARACTÉRISTIQUES */}
+
+          <section className="admin-section">
+
+            <h2>Caractéristiques</h2>
+
+            <div className="form-row">
+
+              <div className="form-group">
+
+                <label htmlFor="storage">
+                  Stockage
+                </label>
+
+                <input
+                  id="storage"
+                  name="storage"
+                  type="text"
+                  value={product.storage}
+                  onChange={handleChange}
+                  placeholder="256 Go"
+                  required
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label htmlFor="screen">
+                  Écran
+                </label>
+
+                <input
+                  id="screen"
+                  name="screen"
+                  type="text"
+                  value={product.screen}
+                  onChange={handleChange}
+                  placeholder="6.3 pouces"
+                  required
+                />
+
+              </div>
+
+            </div>
+
+
+            <div className="form-row">
+
+              <div className="form-group">
+
+                <label htmlFor="connector">
+                  Connecteur
+                </label>
+
+                <input
+                  id="connector"
+                  name="connector"
+                  type="text"
+                  value={product.connector}
+                  onChange={handleChange}
+                  placeholder="USB-C"
+                  required
+                />
+
+              </div>
+
+
+              <div className="form-group">
+
+                <label htmlFor="sim">
+                  SIM
+                </label>
+
+                <input
+                  id="sim"
+                  name="sim"
+                  type="text"
+                  value={product.sim}
+                  onChange={handleChange}
+                  placeholder="Nano-SIM + eSIM"
+                  required
+                />
+
+              </div>
+
+            </div>
+
+          </section>
+
+
+          {/* MESSAGES */}
+
+          {message && (
+            <div className="admin-success">
+              {message}
+            </div>
+          )}
+
+          {error && (
+            <div className="admin-error">
+              {error}
+            </div>
+          )}
+
+
+          {/* BOUTON */}
+
+          <button
+            type="submit"
+            className="admin-submit"
+            disabled={loading}
+          >
+            {loading
+              ? 'Création en cours...'
+              : 'Ajouter le produit'}
+          </button>
+
+        </form>
 
       </main>
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Header from '../components/Header'
 import Navbar from '../components/Navbar'
@@ -6,122 +6,11 @@ import Footer from '../components/Footer'
 
 import '../css/iphone.css'
 
-const products = [
-  {
-    id: 1,
-    name: 'iPhone 17',
-    model: 'iPhone 17',
-    year: 2026,
-    screen: '6.3"',
-    storage: '256 Go',
-    color: 'Noir',
-    operator: 'Débloqué',
-    connector: 'USB-C',
-    sim: 'Nano-SIM + eSIM',
-    price: 899,
-    sales: 120
-  },
-  {
-    id: 2,
-    name: 'iPhone 16',
-    model: 'iPhone 16',
-    year: 2024,
-    screen: '6.1"',
-    storage: '128 Go',
-    color: 'Noir',
-    operator: 'Débloqué',
-    connector: 'USB-C',
-    sim: 'Nano-SIM + eSIM',
-    price: 699,
-    sales: 180
-  },
-  {
-    id: 3,
-    name: 'iPhone 15',
-    model: 'iPhone 15',
-    year: 2023,
-    screen: '6.1"',
-    storage: '256 Go',
-    color: 'Bleu',
-    operator: 'Débloqué',
-    connector: 'USB-C',
-    sim: 'Nano-SIM + eSIM',
-    price: 599,
-    sales: 250
-  },
-  {
-    id: 4,
-    name: 'iPhone 14',
-    model: 'iPhone 14',
-    year: 2022,
-    screen: '6.1"',
-    storage: '128 Go',
-    color: 'Violet',
-    operator: 'Débloqué',
-    connector: 'Lightning',
-    sim: 'Nano-SIM + eSIM',
-    price: 499,
-    sales: 300
-  },
-  {
-    id: 5,
-    name: 'iPhone 13',
-    model: 'iPhone 13',
-    year: 2021,
-    screen: '6.1"',
-    storage: '128 Go',
-    color: 'Noir',
-    operator: 'Débloqué',
-    connector: 'Lightning',
-    sim: 'Nano-SIM + eSIM',
-    price: 399,
-    sales: 350
-  },
-  {
-    id: 6,
-    name: 'iPhone 12',
-    model: 'iPhone 12',
-    year: 2020,
-    screen: '6.1"',
-    storage: '64 Go',
-    color: 'Blanc',
-    operator: 'Débloqué',
-    connector: 'Lightning',
-    sim: 'Nano-SIM + eSIM',
-    price: 299,
-    sales: 420
-  },
-  {
-    id: 7,
-    name: 'iPhone 11',
-    model: 'iPhone 11',
-    year: 2019,
-    screen: '6.1"',
-    storage: '64 Go',
-    color: 'Vert',
-    operator: 'Débloqué',
-    connector: 'Lightning',
-    sim: 'Nano-SIM + eSIM',
-    price: 249,
-    sales: 500
-  },
-  {
-    id: 8,
-    name: 'iPhone XS',
-    model: 'iPhone XS',
-    year: 2018,
-    screen: '5.8"',
-    storage: '256 Go',
-    color: 'Gris',
-    operator: 'Débloqué',
-    connector: 'Lightning',
-    sim: 'Nano-SIM + eSIM',
-    price: 199,
-    sales: 550
-  }
-]
-
 function Iphone() {
+  const [products, setProducts] = useState([])
+
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
 
   const [priceMin, setPriceMin] = useState('')
   const [priceMax, setPriceMax] = useState('')
@@ -131,14 +20,56 @@ function Iphone() {
   const [screen, setScreen] = useState('')
   const [storage, setStorage] = useState('')
   const [color, setColor] = useState('')
-  const [operator, setOperator] = useState('')
   const [connector, setConnector] = useState('')
   const [sim, setSim] = useState('')
 
-  const [sort, setSort] = useState('sales')
+  const [sort, setSort] = useState('price-asc')
 
   const [filters, setFilters] = useState({})
 
+  /*
+   * Récupérer les produits depuis Symfony
+   */
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true)
+        setError('')
+
+        const response = await fetch('/api/products', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error(
+            'Impossible de récupérer les produits.'
+          )
+        }
+
+        const data = await response.json()
+
+        setProducts(data.products || [])
+      } catch (error) {
+        console.error(error)
+
+        setError(
+          error.message ||
+          'Une erreur est survenue lors du chargement des produits.'
+        )
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchProducts()
+  }, [])
+
+  /*
+   * Appliquer les filtres
+   */
   const handleFilter = () => {
     setFilters({
       priceMin,
@@ -148,12 +79,14 @@ function Iphone() {
       screen,
       storage,
       color,
-      operator,
       connector,
-      sim
+      sim,
     })
   }
 
+  /*
+   * Réinitialiser les filtres
+   */
   const resetFilters = () => {
     setPriceMin('')
     setPriceMax('')
@@ -162,29 +95,44 @@ function Iphone() {
     setScreen('')
     setStorage('')
     setColor('')
-    setOperator('')
     setConnector('')
     setSim('')
 
     setFilters({})
   }
 
+  /*
+   * Filtrer les produits
+   */
   let filteredProducts = products.filter((product) => {
 
+    // Seulement les produits de la catégorie Smartphone
+    // et de la sous-catégorie iPhone
+    if (product.category !== 'Smartphone') {
+      return false
+    }
+
+    if (product.subcategory !== 'iPhone') {
+      return false
+    }
+
+    // Prix minimum
     if (
       filters.priceMin &&
-      product.price < Number(filters.priceMin)
+      product.price / 100 < Number(filters.priceMin)
     ) {
       return false
     }
 
+    // Prix maximum
     if (
       filters.priceMax &&
-      product.price > Number(filters.priceMax)
+      product.price / 100 > Number(filters.priceMax)
     ) {
       return false
     }
 
+    // Modèle
     if (
       filters.model &&
       product.model !== filters.model
@@ -192,6 +140,7 @@ function Iphone() {
       return false
     }
 
+    // Année
     if (
       filters.year &&
       product.year !== Number(filters.year)
@@ -199,6 +148,7 @@ function Iphone() {
       return false
     }
 
+    // Écran
     if (
       filters.screen &&
       product.screen !== filters.screen
@@ -206,6 +156,7 @@ function Iphone() {
       return false
     }
 
+    // Stockage
     if (
       filters.storage &&
       product.storage !== filters.storage
@@ -213,6 +164,7 @@ function Iphone() {
       return false
     }
 
+    // Couleur
     if (
       filters.color &&
       product.color !== filters.color
@@ -220,13 +172,7 @@ function Iphone() {
       return false
     }
 
-    if (
-      filters.operator &&
-      product.operator !== filters.operator
-    ) {
-      return false
-    }
-
+    // Connecteur
     if (
       filters.connector &&
       product.connector !== filters.connector
@@ -234,6 +180,7 @@ function Iphone() {
       return false
     }
 
+    // SIM
     if (
       filters.sim &&
       product.sim !== filters.sim
@@ -244,16 +191,26 @@ function Iphone() {
     return true
   })
 
+  /*
+   * Trier les produits
+   */
   if (sort === 'price-asc') {
-    filteredProducts.sort((a, b) => a.price - b.price)
+    filteredProducts.sort(
+      (a, b) => a.price - b.price
+    )
   }
 
   if (sort === 'price-desc') {
-    filteredProducts.sort((a, b) => b.price - a.price)
+    filteredProducts.sort(
+      (a, b) => b.price - a.price
+    )
   }
 
-  if (sort === 'sales') {
-    filteredProducts.sort((a, b) => b.sales - a.sales)
+  /*
+   * Prix stocké en centimes dans MySQL
+   */
+  const formatPrice = (price) => {
+    return (price / 100).toFixed(2)
   }
 
   return (
@@ -266,11 +223,13 @@ function Iphone() {
       <main className="iphone-page">
 
         <div className="iphone-title">
+
           <h1>iPhone</h1>
 
           <p>
             Découvrez notre sélection d'iPhone reconditionnés.
           </p>
+
         </div>
 
         <section className="iphone-content">
@@ -291,14 +250,18 @@ function Iphone() {
                   type="number"
                   placeholder="Min €"
                   value={priceMin}
-                  onChange={(e) => setPriceMin(e.target.value)}
+                  onChange={(e) =>
+                    setPriceMin(e.target.value)
+                  }
                 />
 
                 <input
                   type="number"
                   placeholder="Max €"
                   value={priceMax}
-                  onChange={(e) => setPriceMax(e.target.value)}
+                  onChange={(e) =>
+                    setPriceMax(e.target.value)
+                  }
                 />
 
               </div>
@@ -311,20 +274,27 @@ function Iphone() {
 
               <select
                 value={model}
-                onChange={(e) => setModel(e.target.value)}
+                onChange={(e) =>
+                  setModel(e.target.value)
+                }
               >
-                <option value="">Tous les modèles</option>
+
+                <option value="">
+                  Tous les modèles
+                </option>
 
                 {Array.from(
                   { length: 10 },
                   (_, index) => 17 - index
                 ).map((number) => (
+
                   <option
                     key={number}
                     value={`iPhone ${number}`}
                   >
                     iPhone {number}
                   </option>
+
                 ))}
 
               </select>
@@ -337,17 +307,27 @@ function Iphone() {
 
               <select
                 value={year}
-                onChange={(e) => setYear(e.target.value)}
+                onChange={(e) =>
+                  setYear(e.target.value)
+                }
               >
-                <option value="">Toutes les années</option>
+
+                <option value="">
+                  Toutes les années
+                </option>
 
                 {Array.from(
                   { length: 11 },
                   (_, index) => 2026 - index
                 ).map((year) => (
-                  <option key={year} value={year}>
+
+                  <option
+                    key={year}
+                    value={year}
+                  >
                     {year}
                   </option>
+
                 ))}
 
               </select>
@@ -360,9 +340,15 @@ function Iphone() {
 
               <select
                 value={screen}
-                onChange={(e) => setScreen(e.target.value)}
+                onChange={(e) =>
+                  setScreen(e.target.value)
+                }
               >
-                <option value="">Toutes les tailles</option>
+
+                <option value="">
+                  Toutes les tailles
+                </option>
+
                 <option value='4.7"'>4.7"</option>
                 <option value='5.4"'>5.4"</option>
                 <option value='5.8"'>5.8"</option>
@@ -370,6 +356,7 @@ function Iphone() {
                 <option value='6.3"'>6.3"</option>
                 <option value='6.7"'>6.7"</option>
                 <option value='6.9"'>6.9"</option>
+
               </select>
 
             </div>
@@ -380,9 +367,15 @@ function Iphone() {
 
               <select
                 value={storage}
-                onChange={(e) => setStorage(e.target.value)}
+                onChange={(e) =>
+                  setStorage(e.target.value)
+                }
               >
-                <option value="">Toutes les capacités</option>
+
+                <option value="">
+                  Toutes les capacités
+                </option>
+
                 <option value="32 Go">32 Go</option>
                 <option value="64 Go">64 Go</option>
                 <option value="128 Go">128 Go</option>
@@ -390,6 +383,7 @@ function Iphone() {
                 <option value="512 Go">512 Go</option>
                 <option value="1 To">1 To</option>
                 <option value="2 To">2 To</option>
+
               </select>
 
             </div>
@@ -400,30 +394,22 @@ function Iphone() {
 
               <select
                 value={color}
-                onChange={(e) => setColor(e.target.value)}
+                onChange={(e) =>
+                  setColor(e.target.value)
+                }
               >
-                <option value="">Toutes les couleurs</option>
+
+                <option value="">
+                  Toutes les couleurs
+                </option>
+
                 <option value="Noir">Noir</option>
                 <option value="Blanc">Blanc</option>
                 <option value="Bleu">Bleu</option>
                 <option value="Violet">Violet</option>
                 <option value="Vert">Vert</option>
                 <option value="Gris">Gris</option>
-              </select>
 
-            </div>
-
-            <div className="filter-group">
-
-              <label>Verrouillage opérateur</label>
-
-              <select
-                value={operator}
-                onChange={(e) => setOperator(e.target.value)}
-              >
-                <option value="">Tous</option>
-                <option value="Débloqué">Débloqué</option>
-                <option value="Verrouillé">Verrouillé</option>
               </select>
 
             </div>
@@ -434,11 +420,23 @@ function Iphone() {
 
               <select
                 value={connector}
-                onChange={(e) => setConnector(e.target.value)}
+                onChange={(e) =>
+                  setConnector(e.target.value)
+                }
               >
-                <option value="">Tous</option>
-                <option value="USB-C">USB-C</option>
-                <option value="Lightning">Lightning</option>
+
+                <option value="">
+                  Tous
+                </option>
+
+                <option value="USB-C">
+                  USB-C
+                </option>
+
+                <option value="Lightning">
+                  Lightning
+                </option>
+
               </select>
 
             </div>
@@ -449,15 +447,23 @@ function Iphone() {
 
               <select
                 value={sim}
-                onChange={(e) => setSim(e.target.value)}
+                onChange={(e) =>
+                  setSim(e.target.value)
+                }
               >
-                <option value="">Toutes</option>
+
+                <option value="">
+                  Toutes
+                </option>
+
                 <option value="Nano-SIM + eSIM">
                   Nano-SIM + eSIM
                 </option>
+
                 <option value="eSIM">
                   eSIM
                 </option>
+
               </select>
 
             </div>
@@ -478,7 +484,6 @@ function Iphone() {
 
           </aside>
 
-
           {/* PRODUITS */}
 
           <section className="iphone-products">
@@ -491,11 +496,10 @@ function Iphone() {
 
               <select
                 value={sort}
-                onChange={(e) => setSort(e.target.value)}
+                onChange={(e) =>
+                  setSort(e.target.value)
+                }
               >
-                <option value="sales">
-                  Meilleures ventes
-                </option>
 
                 <option value="price-asc">
                   Prix croissant
@@ -504,46 +508,85 @@ function Iphone() {
                 <option value="price-desc">
                   Prix décroissant
                 </option>
+
               </select>
 
             </div>
 
-            <div className="iphone-grid">
+            {/* CHARGEMENT */}
 
-              {filteredProducts.map((product) => (
+            {loading && (
+              <div className="iphone-message">
+                Chargement des produits...
+              </div>
+            )}
 
-                <article
-                  key={product.id}
-                  className="iphone-card"
-                >
+            {/* ERREUR */}
 
-                  <div className="iphone-card-image">
-                    Image produit
-                  </div>
+            {!loading && error && (
+              <div className="iphone-message">
+                {error}
+              </div>
+            )}
 
-                  <div className="iphone-card-content">
+            {/* PRODUITS */}
 
-                    <h2>{product.name}</h2>
+            {!loading &&
+              !error &&
+              filteredProducts.length > 0 && (
 
-                    <p>
-                      {product.storage} · {product.color}
-                    </p>
+                <div className="iphone-grid">
 
-                    <span className="iphone-card-price">
-                      {product.price} €
-                    </span>
+                  {filteredProducts.map((product) => (
 
-                    <button>
-                      Voir le produit
-                    </button>
+                    <article
+                      key={product.id}
+                      className="iphone-card"
+                    >
 
-                  </div>
+                      <div className="iphone-card-image">
+                        Image produit
+                      </div>
 
-                </article>
+                      <div className="iphone-card-content">
 
-              ))}
+                        <h2>
+                          {product.name}
+                        </h2>
 
-            </div>
+                        <p>
+                          {product.storage} · {product.color}
+                        </p>
+
+                        <span className="iphone-card-price">
+                          {formatPrice(product.price)} €
+                        </span>
+
+                        <button>
+                          Voir le produit
+                        </button>
+
+                      </div>
+
+                    </article>
+
+                  ))}
+
+                </div>
+
+              )}
+
+            {/* AUCUN PRODUIT */}
+
+            {!loading &&
+              !error &&
+              filteredProducts.length === 0 && (
+
+                <div className="iphone-message">
+                  Aucun iPhone ne correspond à vos critères.
+                </div>
+
+              )}
 
           </section>
 

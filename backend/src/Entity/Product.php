@@ -45,6 +45,16 @@ class Product
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $category;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $subcategory;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $brand;
 
     /**
@@ -143,6 +153,30 @@ class Product
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getSubcategory(): ?string
+    {
+        return $this->subcategory;
+    }
+
+    public function setSubcategory(string $subcategory): self
+    {
+        $this->subcategory = $subcategory;
 
         return $this;
     }
