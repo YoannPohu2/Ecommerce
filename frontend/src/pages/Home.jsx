@@ -61,7 +61,19 @@ function Home() {
     </div>
   </div>
 
-  <a href="#">Tablette</a>
+   <div className="nav-dropdown">
+    <a href="#" className="nav-link">
+      Tablette
+    </a>
+
+    <div className="dropdown-menu">
+      <a href="#">Ipad</a>
+      <a href="">Samsung Galaxy Tab</a>
+      <a href="">Tablettes Android</a>
+      <a href="">Accessoires tablette</a>
+    </div>
+  </div>
+
   <a href="#">Console</a>
   <a href="#">Montre connectée</a>
 </nav>
