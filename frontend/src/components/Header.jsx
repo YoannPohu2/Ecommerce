@@ -5,7 +5,8 @@ function Header() {
     <header className="header">
 
       <div className="logo">
-        Reboot
+        <a href="/">Reboot</a>
+        
       </div>
 
       <div className="search-bar">

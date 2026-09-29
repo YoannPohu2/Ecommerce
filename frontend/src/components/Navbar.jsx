@@ -23,7 +23,7 @@ function Navbar() {
 
       {/* ORDINATEUR PORTABLE */}
       <div className="nav-dropdown">
-        <a href="#" className="nav-link">
+        <a href="/iphone" className="nav-link">
           Ordinateur portable
         </a>
 
