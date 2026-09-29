@@ -31,13 +31,26 @@ function Home() {
       </header>
 
       {/* NAVIGATION */}
-      <nav className="navbar">
-        <a href="#">Smartphone</a>
-        <a href="#">Ordinateur portable</a>
-        <a href="#">Tablette</a>
-        <a href="#">Console</a>
-        <a href="#">Montre connectée</a>
-      </nav>
+     <nav className="navbar">
+  <div className="nav-dropdown">
+    <a href="#" className="nav-link">
+      Smartphone
+    </a>
+
+    <div className="dropdown-menu">
+      <a href="#">iPhone</a>
+      <a href="#">Samsung Galaxy</a>
+      <a href="#">Google Pixel</a>
+      <a href="#">Smartphones Android</a>
+      <a href="#">Accessoires smartphone</a>
+    </div>
+  </div>
+
+  <a href="#">Ordinateur portable</a>
+  <a href="#">Tablette</a>
+  <a href="#">Console</a>
+  <a href="#">Montre connectée</a>
+</nav>
 
 
       {/* CONTENU DE LA HOMEPAGE */}
