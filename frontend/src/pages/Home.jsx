@@ -1,117 +1,27 @@
 import '../css/home.css'
 
+import Header from '../components/Header'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+
 function Home() {
   return (
     <div className="home">
 
-      {/* HEADER */}
-      <header className="header">
+      <Header />
 
-        {/* Logo */}
-        <div className="logo">
-          Reboot
-        </div>
-
-        {/* Barre de recherche */}
-        <div className="search-bar">
-          <span className="search-icon">⌕</span>
-
-          <input
-            type="text"
-            placeholder="Rechercher un produit"
-          />
-        </div>
-
-        {/* Actions */}
-        <div className="header-actions">
-          <button>Compte</button>
-          <button>Panier</button>
-        </div>
-
-      </header>
-
-      {/* NAVIGATION */}
-     <nav className="navbar">
-
-  <div className="nav-dropdown">
-    <a href="#" className="nav-link">
-      Smartphone
-    </a>
-
-    <div className="dropdown-menu">
-      <a href="#">iPhone</a>
-      <a href="#">Samsung Galaxy</a>
-      <a href="#">Google Pixel</a>
-      <a href="#">Smartphones Android</a>
-      <a href="#">Accessoires smartphone</a>
-    </div>
-  </div>
-
-  <div className="nav-dropdown">
-    <a href="#" className="nav-link">
-      Ordinateur portable
-    </a>
-
-    <div className="dropdown-menu">
-      <a href="#">MacBook</a>
-      <a href="#">Ordinateurs portables Windows</a>
-      <a href="#">Périphériques & Accessoires</a>
-      <a href="">Ordinateurs portables gaming</a>
-
-    </div>
-  </div>
-
-   <div className="nav-dropdown">
-    <a href="#" className="nav-link">
-      Tablette
-    </a>
-
-    <div className="dropdown-menu">
-      <a href="#">Ipad</a>
-      <a href="">Samsung Galaxy Tab</a>
-      <a href="">Tablettes Android</a>
-      <a href="">Accessoires tablette</a>
-    </div>
-  </div>
-
-   <div className="nav-dropdown">
-    <a href="#" className="nav-link">
-      Console
-    </a>
-
-    <div className="dropdown-menu">
-      <a href="#">Playstation</a>
-      <a href="">Nintendo</a>
-      <a href="">Xbox</a>
-      <a href="">Retro gaming</a>
-      <a href="">Accessoires Jeux video</a>
-    
-    </div>
-  </div>
-
-  <div className="nav-dropdown">
-    <a href="#" className="nav-link">
-      Montre connectée
-    </a>
-
-    <div className="dropdown-menu">
-      <a href="#">Apple Watch</a>
-      <a href="">Samsung Galaxy Watch</a>
-      <a href="">Montres connectées Garmin</a>
-      <a href="">Autres montres connectées</a>
-      <a href="">Accessoires Apple Watch</a>
-
-    </div>
-  </div>
-</nav>
+      <Navbar />
 
 
       {/* CONTENU DE LA HOMEPAGE */}
+
       <main>
 
         {/* HERO */}
         <section className="hero">
+
           <div className="hero-content">
+
             <h1>
               La technologie mérite
               <br />
@@ -126,7 +36,9 @@ function Home() {
             <button className="hero-button">
               Découvrir nos produits
             </button>
+
           </div>
+
         </section>
 
 
@@ -137,10 +49,10 @@ function Home() {
 
           <div className="category-list">
 
-            <div className="category-card">
+            <a href="/smartphone" className="category-card">
               <span>📱</span>
               <h3>Smartphones</h3>
-            </div>
+            </a>
 
             <div className="category-card">
               <span>💻</span>
@@ -175,6 +87,7 @@ function Home() {
           <div className="product-list">
 
             <article className="product-card">
+
               <div className="product-image">
                 Image produit
               </div>
@@ -183,11 +96,15 @@ function Home() {
 
               <p>À partir de 299 €</p>
 
-              <button>Voir le produit</button>
+              <button>
+                Voir le produit
+              </button>
+
             </article>
 
 
             <article className="product-card">
+
               <div className="product-image">
                 Image produit
               </div>
@@ -196,11 +113,15 @@ function Home() {
 
               <p>À partir de 449 €</p>
 
-              <button>Voir le produit</button>
+              <button>
+                Voir le produit
+              </button>
+
             </article>
 
 
             <article className="product-card">
+
               <div className="product-image">
                 Image produit
               </div>
@@ -209,7 +130,10 @@ function Home() {
 
               <p>À partir de 299 €</p>
 
-              <button>Voir le produit</button>
+              <button>
+                Voir le produit
+              </button>
+
             </article>
 
           </div>
@@ -248,36 +172,7 @@ function Home() {
       </main>
 
 
-      {/* FOOTER */}
-      <footer className="footer">
-
-        <div className="footer-logo">
-          Reboot
-        </div>
-
-        <div className="footer-column">
-          <h3>Reboot</h3>
-          <a href="#">À propos</a>
-          <a href="#">Contact</a>
-          <a href="#">FAQ</a>
-        </div>
-
-        <div className="footer-column">
-          <h3>Nos produits</h3>
-          <a href="#">Smartphones</a>
-          <a href="#">Ordinateurs</a>
-          <a href="#">Tablettes</a>
-          <a href="#">Consoles</a>
-        </div>
-
-        <div className="footer-column">
-          <h3>Aide</h3>
-          <a href="#">Livraison</a>
-          <a href="#">Retours</a>
-          <a href="#">Garantie</a>
-        </div>
-
-      </footer>
+      <Footer />
 
     </div>
   )

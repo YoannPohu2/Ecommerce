@@ -1,0 +1,124 @@
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar {
+  width: 100%;
+  min-height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 45px;
+
+  border-bottom: 1px solid #e5e5e5;
+  background: #fff;
+}
+
+.navbar a {
+  font-size: 14px;
+  font-weight: 600;
+
+  transition: opacity 0.2s ease;
+}
+
+.navbar a:hover {
+  opacity: 0.6;
+}
+
+
+/* =========================
+   DROPDOWN
+========================= */
+
+.nav-dropdown {
+  position: relative;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  white-space: nowrap;
+}
+
+.dropdown-menu {
+  position: absolute;
+
+  top: 52px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 230px;
+  padding: 10px 0;
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+
+  display: none;
+
+  z-index: 100;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-menu a {
+  width: 100%;
+
+  padding: 12px 18px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  white-space: nowrap;
+
+  transition: background 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background: #f5f5f5;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+  .navbar {
+    gap: 25px;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .navbar {
+    padding: 15px 20px;
+
+    justify-content: flex-start;
+
+    overflow-x: auto;
+
+    gap: 25px;
+  }
+
+  .navbar a {
+    white-space: nowrap;
+  }
+
+}
