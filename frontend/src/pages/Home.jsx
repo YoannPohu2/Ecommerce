@@ -89,7 +89,20 @@ function Home() {
     </div>
   </div>
 
-  <a href="#">Montre connectée</a>
+  <div className="nav-dropdown">
+    <a href="#" className="nav-link">
+      Montre connectée
+    </a>
+
+    <div className="dropdown-menu">
+      <a href="#">Apple Watch</a>
+      <a href="">Samsung Galaxy Watch</a>
+      <a href="">Montres connectées Garmin</a>
+      <a href="">Autres montres connectées</a>
+      <a href="">Accessoires Apple Watch</a>
+
+    </div>
+  </div>
 </nav>
 
 
