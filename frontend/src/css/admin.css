@@ -1,0 +1,175 @@
+.admin-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 40px 80px;
+}
+
+.admin-header {
+  margin-bottom: 40px;
+}
+
+.admin-header h1 {
+  margin-bottom: 10px;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.admin-header p {
+  color: #666;
+  font-size: 16px;
+}
+
+.admin-product {
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.admin-product-header {
+  padding: 30px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.admin-product-header h2 {
+  margin-bottom: 8px;
+  font-size: 24px;
+}
+
+.admin-product-header p {
+  color: #666;
+  font-size: 14px;
+}
+
+.admin-section {
+  padding: 30px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.admin-section h3 {
+  margin-bottom: 25px;
+  font-size: 18px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-field label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-field input,
+.admin-field select,
+.admin-field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 5px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.admin-field input,
+.admin-field select {
+  height: 44px;
+}
+
+.admin-field textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+
+.admin-field input:focus,
+.admin-field select:focus,
+.admin-field textarea:focus {
+  border-color: #000;
+}
+
+.admin-upload {
+  padding: 30px;
+  border: 1px dashed #bbb;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+  color: #666;
+}
+
+.admin-upload input {
+  font-size: 14px;
+}
+
+.admin-actions {
+  padding: 25px 30px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.admin-actions button {
+  height: 44px;
+  padding: 0 25px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-cancel {
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.admin-submit {
+  border: 1px solid #000;
+  background: #000;
+  color: #fff;
+}
+
+.admin-submit:hover {
+  background: #222;
+}
+
+@media (max-width: 700px) {
+
+  .admin-page {
+    padding: 45px 20px 60px;
+  }
+
+  .admin-header h1 {
+    font-size: 34px;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-section,
+  .admin-product-header {
+    padding: 25px 20px;
+  }
+
+  .admin-actions {
+    padding: 20px;
+    flex-direction: column;
+  }
+
+  .admin-actions button {
+    width: 100%;
+  }
+
+}
