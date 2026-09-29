@@ -74,7 +74,21 @@ function Home() {
     </div>
   </div>
 
-  <a href="#">Console</a>
+   <div className="nav-dropdown">
+    <a href="#" className="nav-link">
+      Console
+    </a>
+
+    <div className="dropdown-menu">
+      <a href="#">Playstation</a>
+      <a href="">Nintendo</a>
+      <a href="">Xbox</a>
+      <a href="">Retro gaming</a>
+      <a href="">Accessoires Jeux video</a>
+    
+    </div>
+  </div>
+
   <a href="#">Montre connectée</a>
 </nav>
 
