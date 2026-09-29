@@ -1,240 +1,196 @@
-/* ========================================
-   REBOOT - HOME
-======================================== */
-
-
-/* ========================================
+/* =========================
    HEADER
-======================================== */
+========================= */
 
 .header {
   width: 100%;
   height: 80px;
+  padding: 0 40px;
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
-  padding: 0 60px;
-  gap: 40px;
-
-  background-color: #ffffff;
   border-bottom: 1px solid #e5e5e5;
+  background: #fff;
 }
-
-
-/* Logo */
 
 .logo {
-  font-size: 32px;
+  width: 180px;
+
+  font-size: 28px;
   font-weight: 800;
-  letter-spacing: -1.5px;
-
-  color: #171717;
-
-  white-space: nowrap;
+  letter-spacing: -1px;
 }
-
-
-/* Barre de recherche */
 
 .search-bar {
   flex: 1;
-
   max-width: 650px;
-  height: 48px;
+  height: 44px;
+
+  margin: 0 40px;
 
   display: flex;
   align-items: center;
 
-  padding: 0 16px;
-
-  background-color: #f3f3f3;
-  border-radius: 8px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 6px;
 }
 
 .search-icon {
-  margin-right: 10px;
-
-  font-size: 24px;
+  padding-left: 15px;
+  font-size: 22px;
 }
 
 .search-bar input {
   width: 100%;
   height: 100%;
 
+  padding: 0 15px;
+
   border: none;
   outline: none;
-
   background: transparent;
 
-  font-size: 16px;
+  font-size: 15px;
 }
-
-.search-bar input::placeholder {
-  color: #777777;
-}
-
-
-/* Actions */
 
 .header-actions {
+  width: 180px;
+
   display: flex;
-  align-items: center;
-
-  gap: 25px;
-
-  margin-left: auto;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .header-actions button {
   border: none;
-
   background: transparent;
 
-  color: #171717;
-
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-
-  cursor: pointer;
-}
-
-.header-actions button:hover {
-  opacity: 0.6;
 }
 
 
-/* ========================================
-   NAVIGATION
-======================================== */
+/* =========================
+   NAVBAR
+========================= */
 
 .navbar {
   width: 100%;
-  min-height: 55px;
+  min-height: 52px;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 45px;
 
-  padding: 10px 30px;
-
-  background-color: #ffffff;
-
   border-bottom: 1px solid #e5e5e5;
+  background: #fff;
 }
 
 .navbar a {
-  color: #171717;
-
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
-
-  white-space: nowrap;
 
   transition: opacity 0.2s ease;
 }
 
 .navbar a:hover {
-  opacity: 0.55;
+  opacity: 0.6;
 }
 
 
-/* ========================================
+/* =========================
    HERO
-======================================== */
+========================= */
 
 .hero {
   width: 100%;
-  min-height: 470px;
+  min-height: 480px;
 
   display: flex;
   align-items: center;
+  justify-content: center;
 
-  padding: 70px 80px;
-
-  background-color: #f2f2f2;
+  background: #f3f3f3;
 }
 
 .hero-content {
-  max-width: 650px;
+  width: 100%;
+  max-width: 1250px;
+
+  padding: 80px 40px;
 }
 
 .hero h1 {
-  margin-bottom: 25px;
-
-  color: #171717;
-
-  font-size: 58px;
+  font-size: clamp(42px, 5vw, 72px);
   line-height: 1.05;
-  letter-spacing: -2px;
+  letter-spacing: -3px;
+  font-weight: 800;
+
+  margin-bottom: 25px;
 }
 
 .hero p {
+  max-width: 550px;
+
+  font-size: 18px;
+  line-height: 1.6;
+
+  color: #555;
+
   margin-bottom: 30px;
-
-  color: #555555;
-
-  font-size: 20px;
-  line-height: 1.5;
 }
 
 .hero-button {
   padding: 15px 25px;
 
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
 
-  background-color: #171717;
-  color: #ffffff;
+  background: #000;
+  color: #fff;
 
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
 
-  cursor: pointer;
-
-  transition: background-color 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .hero-button:hover {
-  background-color: #333333;
+  transform: translateY(-2px);
 }
 
 
-/* ========================================
-   CATÉGORIES
-======================================== */
+/* =========================
+   CATEGORIES
+========================= */
 
 .categories {
+  width: 100%;
   max-width: 1250px;
 
   margin: 0 auto;
-
-  padding: 70px 30px;
+  padding: 70px 40px;
 }
 
-.categories h2 {
-  margin-bottom: 35px;
-
-  color: #171717;
-
+.categories h2,
+.products h2,
+.new-products h2,
+.promotions h2 {
   font-size: 32px;
+  letter-spacing: -1px;
+
+  margin-bottom: 30px;
 }
-
-
-/* Liste */
 
 .category-list {
   display: grid;
-
   grid-template-columns: repeat(5, 1fr);
-
-  gap: 20px;
+  gap: 15px;
 }
-
-
-/* Carte */
 
 .category-card {
   min-height: 150px;
@@ -244,95 +200,58 @@
   align-items: center;
   justify-content: center;
 
-  gap: 15px;
-
-  padding: 20px;
-
-  background-color: #ffffff;
-
   border: 1px solid #e5e5e5;
-  border-radius: 10px;
+  border-radius: 8px;
 
-  cursor: pointer;
+  background: #fff;
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease;
+    border-color 0.2s ease;
 }
 
 .category-card:hover {
   transform: translateY(-4px);
-
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  border-color: #000;
 }
 
 .category-card span {
-  font-size: 38px;
+  font-size: 40px;
+  margin-bottom: 15px;
 }
 
 .category-card h3 {
-  color: #171717;
-
   font-size: 15px;
   text-align: center;
 }
 
 
-/* ========================================
-   PRODUITS
-======================================== */
+/* =========================
+   PRODUCTS
+========================= */
 
 .products {
+  width: 100%;
   max-width: 1250px;
 
   margin: 0 auto;
-
-  padding: 70px 30px;
+  padding: 20px 40px 70px;
 }
-
-.products h2 {
-  margin-bottom: 35px;
-
-  color: #171717;
-
-  font-size: 32px;
-}
-
-
-/* Liste produits */
 
 .product-list {
   display: grid;
-
   grid-template-columns: repeat(3, 1fr);
-
-  gap: 25px;
+  gap: 20px;
 }
-
-
-/* Carte produit */
 
 .product-card {
   padding: 20px;
 
-  background-color: #ffffff;
-
   border: 1px solid #e5e5e5;
-  border-radius: 10px;
+  border-radius: 8px;
 
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  background: #fff;
 }
-
-.product-card:hover {
-  transform: translateY(-4px);
-
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-}
-
-
-/* Image produit */
 
 .product-image {
   width: 100%;
@@ -344,227 +263,201 @@
 
   margin-bottom: 20px;
 
-  background-color: #f3f3f3;
+  background: #f5f5f5;
+  border-radius: 6px;
 
-  border-radius: 8px;
-
-  color: #888888;
+  color: #888;
 }
 
-
-/* Informations */
-
 .product-card h3 {
-  margin-bottom: 10px;
-
-  color: #171717;
-
   font-size: 18px;
+  margin-bottom: 10px;
 }
 
 .product-card p {
+  color: #555;
   margin-bottom: 20px;
-
-  color: #171717;
-
-  font-size: 16px;
-  font-weight: 700;
 }
-
-
-/* Bouton */
 
 .product-card button {
-  width: 100%;
-
-  padding: 12px;
+  padding: 11px 18px;
 
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
 
-  background-color: #171717;
-  color: #ffffff;
+  background: #000;
+  color: #fff;
 
-  font-size: 14px;
   font-weight: 600;
-
-  cursor: pointer;
-
-  transition: background-color 0.2s ease;
-}
-
-.product-card button:hover {
-  background-color: #333333;
 }
 
 
-/* ========================================
+/* =========================
    PROMOTIONS
-======================================== */
+========================= */
 
 .promotions {
   width: 100%;
-
-  padding: 80px 30px;
+  padding: 80px 40px;
 
   text-align: center;
 
-  background-color: #171717;
-  color: #ffffff;
-}
-
-.promotions h2 {
-  margin-bottom: 15px;
-
-  font-size: 36px;
+  background: #111;
+  color: #fff;
 }
 
 .promotions p {
   max-width: 600px;
 
-  margin: 0 auto 30px;
+  margin: 0 auto 25px;
 
-  color: #cccccc;
-
-  font-size: 17px;
-  line-height: 1.5;
+  color: #ccc;
+  line-height: 1.6;
 }
 
 .promotions button {
-  padding: 14px 25px;
+  padding: 13px 22px;
 
-  border: none;
-  border-radius: 6px;
+  border: 1px solid #fff;
+  border-radius: 5px;
 
-  background-color: #ffffff;
-  color: #171717;
+  background: #fff;
+  color: #000;
 
-  font-size: 15px;
   font-weight: 600;
-
-  cursor: pointer;
-}
-
-.promotions button:hover {
-  background-color: #eeeeee;
 }
 
 
-/* ========================================
+/* =========================
    NOUVEAUTÉS
-======================================== */
+========================= */
 
 .new-products {
+  width: 100%;
   max-width: 1250px;
-  min-height: 250px;
 
   margin: 0 auto;
-
-  padding: 70px 30px;
-}
-
-.new-products h2 {
-  margin-bottom: 20px;
-
-  color: #171717;
-
-  font-size: 32px;
+  padding: 70px 40px;
 }
 
 .new-products p {
-  color: #666666;
-
-  font-size: 16px;
+  color: #666;
 }
 
 
-/* ========================================
+/* =========================
    FOOTER
-======================================== */
+========================= */
 
 .footer {
   width: 100%;
 
   display: grid;
-
   grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 50px;
 
-  gap: 40px;
+  padding: 60px 40px;
 
-  padding: 60px;
-
-  background-color: #f3f3f3;
-
-  border-top: 1px solid #e5e5e5;
+  background: #f5f5f5;
+  border-top: 1px solid #ddd;
 }
-
-
-/* Logo footer */
 
 .footer-logo {
-  color: #171717;
-
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 800;
 }
-
-
-/* Colonnes */
 
 .footer-column {
   display: flex;
   flex-direction: column;
-
   gap: 12px;
 }
 
 .footer-column h3 {
-  margin-bottom: 10px;
-
-  color: #171717;
-
-  font-size: 16px;
+  margin-bottom: 5px;
+  font-size: 15px;
 }
 
 .footer-column a {
-  color: #666666;
-
+  color: #666;
   font-size: 14px;
-
-  transition: color 0.2s ease;
 }
 
 .footer-column a:hover {
-  color: #171717;
+  color: #000;
 }
 
 
-/* ========================================
-   TABLETTE
-======================================== */
+/* =========================
+   RESPONSIVE
+========================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
+  .category-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 
-  .header {
-    padding: 0 25px;
-
-    gap: 20px;
+  .product-list {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .navbar {
-    justify-content: flex-start;
-
     gap: 25px;
+  }
+}
 
-    overflow-x: auto;
+@media (max-width: 700px) {
+  .header {
+    height: auto;
+    padding: 20px;
+
+    flex-wrap: wrap;
+    gap: 15px;
   }
 
-  .hero {
-    padding: 60px 30px;
+  .logo {
+    width: auto;
+  }
+
+  .search-bar {
+    order: 3;
+
+    width: 100%;
+    max-width: none;
+
+    margin: 0;
+  }
+
+  .header-actions {
+    width: auto;
+  }
+
+  .navbar {
+    padding: 15px 20px;
+
+    justify-content: flex-start;
+
+    overflow-x: auto;
+    gap: 25px;
+  }
+
+  .navbar a {
+    white-space: nowrap;
+  }
+
+  .hero-content {
+    padding: 60px 25px;
   }
 
   .hero h1 {
-    font-size: 44px;
+    font-size: 45px;
+  }
+
+  .categories,
+  .products,
+  .new-products {
+    padding-left: 25px;
+    padding-right: 25px;
   }
 
   .category-list {
@@ -577,94 +470,21 @@
 
   .footer {
     grid-template-columns: 1fr 1fr;
-
-    padding: 40px 30px;
+    padding: 50px 25px;
   }
 }
 
-
-/* ========================================
-   MOBILE
-======================================== */
-
-@media (max-width: 600px) {
-
-  .header {
-    height: auto;
-
-    flex-wrap: wrap;
-
-    padding: 20px;
-  }
-
-  .logo {
-    font-size: 28px;
-  }
-
-  .search-bar {
-    order: 3;
-
-    width: 100%;
-    max-width: none;
-  }
-
-  .header-actions {
-    margin-left: auto;
-
-    gap: 15px;
-  }
-
-  .header-actions button {
-    font-size: 14px;
-  }
-
-  .navbar {
-    justify-content: flex-start;
-
-    padding: 15px 20px;
-
-    gap: 20px;
-
-    overflow-x: auto;
-  }
-
-  .navbar a {
-    font-size: 14px;
-  }
-
-  .hero {
-    min-height: 400px;
-
-    padding: 50px 25px;
-  }
-
-  .hero h1 {
-    font-size: 38px;
-  }
-
-  .hero p {
-    font-size: 17px;
-  }
-
-  .categories,
-  .products,
-  .new-products {
-    padding: 50px 20px;
-  }
-
-  .categories h2,
-  .products h2,
-  .new-products h2 {
-    font-size: 28px;
+@media (max-width: 450px) {
+  #root {
+    border-left-width: 1px;
+    border-right-width: 1px;
   }
 
   .category-list {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .footer {
     grid-template-columns: 1fr;
-
-    padding: 40px 25px;
   }
 }
