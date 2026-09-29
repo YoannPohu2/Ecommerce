@@ -32,6 +32,7 @@ function Home() {
 
       {/* NAVIGATION */}
      <nav className="navbar">
+
   <div className="nav-dropdown">
     <a href="#" className="nav-link">
       Smartphone
@@ -46,7 +47,20 @@ function Home() {
     </div>
   </div>
 
-  <a href="#">Ordinateur portable</a>
+  <div className="nav-dropdown">
+    <a href="#" className="nav-link">
+      Ordinateur portable
+    </a>
+
+    <div className="dropdown-menu">
+      <a href="#">MacBook</a>
+      <a href="#">Ordinateurs portables Windows</a>
+      <a href="#">Périphériques & Accessoires</a>
+      <a href="">Ordinateurs portables gaming</a>
+
+    </div>
+  </div>
+
   <a href="#">Tablette</a>
   <a href="#">Console</a>
   <a href="#">Montre connectée</a>
