@@ -38,7 +38,7 @@ function Navbar() {
 
       {/* TABLETTE */}
       <div className="nav-dropdown">
-        <a href="#" className="nav-link">
+        <a href="tablet" className="nav-link">
           Tablette
         </a>
 
