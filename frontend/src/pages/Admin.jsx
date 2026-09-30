@@ -1,566 +1,773 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
 import Header from '../components/Header'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+
 import '../css/admin.css'
 
+const categories = {
+  Smartphone: [
+    'iPhone',
+    'Samsung',
+    'Google Pixel',
+    'Xiaomi',
+  ],
+
+  'Ordinateur portable': [
+    'MacBook',
+    'PC portable',
+    'PC gaming',
+  ],
+
+  Tablette: [
+    'iPad',
+    'Samsung Galaxy Tab',
+    'Lenovo Tab',
+  ],
+
+  Console: [
+    'PlayStation',
+    'Xbox',
+    'Nintendo',
+  ],
+
+  'Montre connectée': [
+    'Apple Watch',
+    'Samsung Galaxy Watch',
+    'Garmin',
+  ],
+}
+
+const emptyProduct = {
+  name: '',
+  category: '',
+  subcategory: '',
+  price: '',
+  stock: '',
+  description: '',
+  brand: '',
+  model: '',
+  year: '',
+  color: '',
+  storage: '',
+  screen: '',
+  connector: '',
+  sim: '',
+}
+
 function Admin() {
-  const [product, setProduct] = useState({
-    name: '',
-    description: '',
-    price: '',
-    stock: '',
-    category: '',
-    subcategory: '',
-    brand: '',
-    model: '',
-    year: '',
-    color: '',
-    storage: '',
-    screen: '',
-    connector: '',
-    sim: ''
-  })
+
+  const [activePage, setActivePage] = useState('dashboard')
+
+  const [products, setProducts] = useState([])
+
+  const [product, setProduct] = useState(emptyProduct)
+
+  const [editingProduct, setEditingProduct] = useState(null)
+
+  const [showForm, setShowForm] = useState(false)
 
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const categories = {
-    Smartphone: [
-      'iPhone',
-      'Samsung',
-      'Google Pixel',
-      'Xiaomi'
-    ],
-    'Ordinateur portable': [
-      'MacBook',
-      'PC portable',
-      'PC gaming'
-    ],
-    Tablette: [
-      'iPad',
-      'Samsung Galaxy Tab',
-      'Lenovo Tab'
-    ],
-    Console: [
-      'PlayStation',
-      'Xbox',
-      'Nintendo'
-    ],
-    'Montre connectée': [
-      'Apple Watch',
-      'Samsung Galaxy Watch',
-      'Garmin'
-    ]
-  }
+  /*
+   * Récupérer les produits
+   */
+  const fetchProducts = async () => {
 
-  const handleChange = (event) => {
-    const { name, value } = event.target
+    try {
 
-    setProduct((prev) => {
-      const updatedProduct = {
-        ...prev,
-        [name]: value
+      setError('')
+
+      const response = await fetch('/api/products')
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || 'Impossible de récupérer les produits.'
+        )
       }
 
-      // Si la catégorie change, on réinitialise la sous-catégorie
-      if (name === 'category') {
-        updatedProduct.subcategory = ''
-      }
+      setProducts(data.products || [])
 
-      return updatedProduct
-    })
+    } catch (error) {
+
+      console.error(error)
+
+      setError(error.message)
+
+    }
   }
 
+  /*
+   * Charger les produits au démarrage
+   */
+  useEffect(() => {
+    fetchProducts()
+  }, [])
+
+  /*
+   * Modifier les champs du formulaire
+   */
+  const handleChange = (e) => {
+
+    const { name, value } = e.target
+
+    setProduct((previous) => ({
+      ...previous,
+      [name]: value,
+    }))
+
+    setMessage('')
+    setError('')
+  }
+
+  /*
+   * Générer le slug
+   */
   const generateSlug = (name) => {
+
     return name
       .toLowerCase()
-      .trim()
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
+  /*
+   * Réinitialiser le formulaire
+   */
+  const resetForm = () => {
+
+    setProduct(emptyProduct)
+    setEditingProduct(null)
+    setShowForm(false)
 
     setMessage('')
     setError('')
+  }
+
+  /*
+   * Ajouter un produit
+   */
+  const handleCreate = async (e) => {
+
+    e.preventDefault()
+
     setLoading(true)
-
-    const productData = {
-      name: product.name,
-      slug: generateSlug(product.name),
-      description: product.description,
-
-      // Prix en centimes
-      // Exemple : 899.99 € → 89999
-      price: Math.round(Number(product.price) * 100),
-
-      stock: Number(product.stock),
-
-      // Catégorie
-      category: product.category,
-      subcategory: product.subcategory,
-
-      // Informations produit
-      brand: product.brand,
-      model: product.model,
-      year: Number(product.year),
-      color: product.color,
-
-      // Caractéristiques
-      storage: product.storage,
-      screen: product.screen,
-      connector: product.connector,
-      sim: product.sim
-    }
+    setMessage('')
+    setError('')
 
     try {
+
+      const productData = {
+        name: product.name,
+        slug: generateSlug(product.name),
+        description: product.description,
+
+        price: Math.round(
+          Number(product.price) * 100
+        ),
+
+        stock: Number(product.stock),
+
+        category: product.category,
+        subcategory: product.subcategory,
+
+        brand: product.brand,
+        model: product.model,
+        year: Number(product.year),
+
+        color: product.color,
+        storage: product.storage,
+        screen: product.screen,
+        connector: product.connector,
+        sim: product.sim,
+      }
+
       const response = await fetch('/api/products', {
+
         method: 'POST',
+
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json'
+          Accept: 'application/json',
         },
-        body: JSON.stringify(productData)
+
+        body: JSON.stringify(productData),
+
       })
 
       const data = await response.json()
 
       if (!response.ok) {
         throw new Error(
-          data.message || 'Impossible de créer le produit.'
+          data.message ||
+          'Impossible de créer le produit.'
         )
       }
 
-      setMessage('Produit créé avec succès !')
+      setMessage('Produit créé avec succès.')
 
-      console.log('Produit créé :', data.product)
+      await fetchProducts()
 
-      // Réinitialiser le formulaire
-      setProduct({
-        name: '',
-        description: '',
-        price: '',
-        stock: '',
-        category: '',
-        subcategory: '',
-        brand: '',
-        model: '',
-        year: '',
-        color: '',
-        storage: '',
-        screen: '',
-        connector: '',
-        sim: ''
-      })
+      resetForm()
+
+      setActivePage('products')
+
     } catch (error) {
+
       console.error(error)
 
-      setError(
-        error.message || 'Une erreur est survenue lors de la création.'
-      )
+      setError(error.message)
+
     } finally {
+
       setLoading(false)
+
     }
   }
 
-  return (
-    <div className="admin">
-      <Header />
+  /*
+   * Modifier un produit
+   */
+  const handleUpdate = async (e) => {
 
-      <Navbar />
+    e.preventDefault()
 
-      <main className="admin-page">
+    if (!editingProduct) {
+      return
+    }
 
-        <div className="admin-title">
-          <h1>Administration</h1>
-          <p>Ajouter un nouveau produit</p>
+    setLoading(true)
+    setMessage('')
+    setError('')
+
+    try {
+
+      const productData = {
+        name: product.name,
+        slug: generateSlug(product.name),
+        description: product.description,
+
+        price: Math.round(
+          Number(product.price) * 100
+        ),
+
+        stock: Number(product.stock),
+
+        category: product.category,
+        subcategory: product.subcategory,
+
+        brand: product.brand,
+        model: product.model,
+        year: Number(product.year),
+
+        color: product.color,
+        storage: product.storage,
+        screen: product.screen,
+        connector: product.connector,
+        sim: product.sim,
+      }
+
+      const response = await fetch(
+        `/api/products/${editingProduct.id}`,
+        {
+          method: 'PUT',
+
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+
+          body: JSON.stringify(productData),
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+          'Impossible de modifier le produit.'
+        )
+      }
+
+      setMessage('Produit modifié avec succès.')
+
+      await fetchProducts()
+
+      resetForm()
+
+      setActivePage('products')
+
+    } catch (error) {
+
+      console.error(error)
+
+      setError(error.message)
+
+    } finally {
+
+      setLoading(false)
+
+    }
+  }
+
+  /*
+   * Supprimer un produit
+   */
+  const handleDelete = async (id) => {
+
+    const confirmed = window.confirm(
+      'Voulez-vous vraiment supprimer ce produit ?'
+    )
+
+    if (!confirmed) {
+      return
+    }
+
+    try {
+
+      setError('')
+      setMessage('')
+
+      const response = await fetch(
+        `/api/products/${id}`,
+        {
+          method: 'DELETE',
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(
+          data.message ||
+          'Impossible de supprimer le produit.'
+        )
+      }
+
+      setMessage('Produit supprimé avec succès.')
+
+      await fetchProducts()
+
+    } catch (error) {
+
+      console.error(error)
+
+      setError(error.message)
+
+    }
+  }
+
+  /*
+   * Préparer la modification
+   */
+  const handleEdit = (productToEdit) => {
+
+    setEditingProduct(productToEdit)
+
+    setProduct({
+      name: productToEdit.name || '',
+      category: productToEdit.category || '',
+      subcategory: productToEdit.subcategory || '',
+      price: productToEdit.price
+        ? productToEdit.price / 100
+        : '',
+      stock: productToEdit.stock ?? '',
+      description: productToEdit.description || '',
+      brand: productToEdit.brand || '',
+      model: productToEdit.model || '',
+      year: productToEdit.year || '',
+      color: productToEdit.color || '',
+      storage: productToEdit.storage || '',
+      screen: productToEdit.screen || '',
+      connector: productToEdit.connector || '',
+      sim: productToEdit.sim || '',
+    })
+
+    setShowForm(true)
+    setActivePage('products')
+  }
+
+  /*
+   * Statistiques
+   */
+  const totalProducts = products.length
+
+  const totalStock = products.reduce(
+    (total, product) =>
+      total + Number(product.stock || 0),
+    0
+  )
+
+  const totalCategories = new Set(
+    products.map((product) => product.category)
+  ).size
+
+  const lowStock = products.filter(
+    (product) => Number(product.stock) <= 5
+  ).length
+
+  /*
+   * Formulaire produit
+   */
+  const renderProductForm = () => (
+
+    <section className="admin-product-form">
+
+      <div className="admin-product-header">
+
+        <div>
+
+          <h2>
+            {editingProduct
+              ? 'Modifier le produit'
+              : 'Ajouter un produit'
+            }
+          </h2>
+
+          <p>
+            {editingProduct
+              ? 'Modifiez les informations du produit.'
+              : 'Ajoutez un nouveau produit au catalogue.'
+            }
+          </p>
+
         </div>
 
-        <form
-          className="admin-form"
-          onSubmit={handleSubmit}
+        <button
+          type="button"
+          className="admin-cancel"
+          onClick={resetForm}
         >
+          Retour
+        </button>
 
-          {/* INFORMATIONS GÉNÉRALES */}
+      </div>
 
-          <section className="admin-section">
+      {message && (
+        <div className="admin-message admin-success">
+          {message}
+        </div>
+      )}
 
-            <h2>Informations générales</h2>
+      {error && (
+        <div className="admin-message admin-error">
+          {error}
+        </div>
+      )}
 
-            <div className="form-group">
+      <form
+        onSubmit={
+          editingProduct
+            ? handleUpdate
+            : handleCreate
+        }
+      >
 
-              <label htmlFor="name">
-                Nom du produit
-              </label>
+        <div className="admin-section">
+
+          <h3>Informations générales</h3>
+
+          <div className="admin-grid">
+
+            <div className="admin-field">
+
+              <label>Nom du produit</label>
 
               <input
-                id="name"
-                name="name"
                 type="text"
+                name="name"
+                placeholder="Ex : iPhone 17"
                 value={product.name}
                 onChange={handleChange}
-                placeholder="Ex : iPhone 17"
                 required
               />
 
             </div>
 
-            <div className="form-group">
+            <div className="admin-field">
 
-              <label htmlFor="description">
-                Description
-              </label>
+              <label>Marque</label>
 
-              <textarea
-                id="description"
-                name="description"
-                value={product.description}
+              <input
+                type="text"
+                name="brand"
+                placeholder="Ex : Apple"
+                value={product.brand}
                 onChange={handleChange}
-                placeholder="Description du produit"
                 required
               />
 
             </div>
 
-          </section>
+            <div className="admin-field">
 
+              <label>Modèle</label>
 
-          {/* CATÉGORIE */}
+              <input
+                type="text"
+                name="model"
+                placeholder="Ex : iPhone 17"
+                value={product.model}
+                onChange={handleChange}
+                required
+              />
 
-          <section className="admin-section">
+            </div>
 
-            <h2>Catégorie</h2>
+            <div className="admin-field">
 
-            <div className="form-row">
+              <label>Année</label>
 
-              <div className="form-group">
+              <input
+                type="number"
+                name="year"
+                placeholder="2026"
+                value={product.year}
+                onChange={handleChange}
+                required
+              />
 
-                <label htmlFor="category">
-                  Catégorie
-                </label>
+            </div>
 
-                <select
-                  id="category"
-                  name="category"
-                  value={product.category}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">
-                    Sélectionner une catégorie
-                  </option>
+            <div className="admin-field">
 
-                  {Object.keys(categories).map((category) => (
+              <label>Prix (€)</label>
+
+              <input
+                type="number"
+                name="price"
+                min="0"
+                step="0.01"
+                placeholder="899"
+                value={product.price}
+                onChange={handleChange}
+                required
+              />
+
+            </div>
+
+            <div className="admin-field">
+
+              <label>Stock</label>
+
+              <input
+                type="number"
+                name="stock"
+                min="0"
+                placeholder="10"
+                value={product.stock}
+                onChange={handleChange}
+                required
+              />
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="admin-section">
+
+          <h3>Catégorie</h3>
+
+          <div className="admin-grid">
+
+            <div className="admin-field">
+
+              <label>Catégorie</label>
+
+              <select
+                name="category"
+                value={product.category}
+                onChange={(e) => {
+
+                  setProduct({
+                    ...product,
+                    category: e.target.value,
+                    subcategory: '',
+                  })
+
+                }}
+                required
+              >
+
+                <option value="">
+                  Sélectionner une catégorie
+                </option>
+
+                {Object.keys(categories).map(
+                  (category) => (
+
                     <option
                       key={category}
                       value={category}
                     >
                       {category}
                     </option>
-                  ))}
 
-                </select>
+                  )
+                )}
 
-              </div>
-
-
-              <div className="form-group">
-
-                <label htmlFor="subcategory">
-                  Sous-catégorie
-                </label>
-
-                <select
-                  id="subcategory"
-                  name="subcategory"
-                  value={product.subcategory}
-                  onChange={handleChange}
-                  disabled={!product.category}
-                  required
-                >
-                  <option value="">
-                    Sélectionner une sous-catégorie
-                  </option>
-
-                  {product.category &&
-                    categories[product.category].map(
-                      (subcategory) => (
-                        <option
-                          key={subcategory}
-                          value={subcategory}
-                        >
-                          {subcategory}
-                        </option>
-                      )
-                    )}
-
-                </select>
-
-              </div>
+              </select>
 
             </div>
 
-          </section>
+            <div className="admin-field">
 
+              <label>Sous-catégorie</label>
 
-          {/* PRIX ET STOCK */}
+              <select
+                name="subcategory"
+                value={product.subcategory}
+                onChange={handleChange}
+                disabled={!product.category}
+                required
+              >
 
-          <section className="admin-section">
+                <option value="">
+                  Sélectionner une sous-catégorie
+                </option>
 
-            <h2>Prix et stock</h2>
+                {product.category &&
+                  categories[
+                    product.category
+                  ].map((subcategory) => (
 
-            <div className="form-row">
+                    <option
+                      key={subcategory}
+                      value={subcategory}
+                    >
+                      {subcategory}
+                    </option>
 
-              <div className="form-group">
+                  ))
+                }
 
-                <label htmlFor="price">
-                  Prix (€)
-                </label>
-
-                <input
-                  id="price"
-                  name="price"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={product.price}
-                  onChange={handleChange}
-                  placeholder="899.99"
-                  required
-                />
-
-              </div>
-
-
-              <div className="form-group">
-
-                <label htmlFor="stock">
-                  Stock
-                </label>
-
-                <input
-                  id="stock"
-                  name="stock"
-                  type="number"
-                  min="0"
-                  value={product.stock}
-                  onChange={handleChange}
-                  placeholder="10"
-                  required
-                />
-
-              </div>
+              </select>
 
             </div>
 
-          </section>
+          </div>
 
+        </div>
 
-          {/* INFORMATIONS PRODUIT */}
+        <div className="admin-section">
 
-          <section className="admin-section">
+          <h3>Caractéristiques</h3>
 
-            <h2>Informations produit</h2>
+          <div className="admin-grid">
 
-            <div className="form-row">
+            <div className="admin-field">
 
-              <div className="form-group">
+              <label>Couleur</label>
 
-                <label htmlFor="brand">
-                  Marque
-                </label>
-
-                <input
-                  id="brand"
-                  name="brand"
-                  type="text"
-                  value={product.brand}
-                  onChange={handleChange}
-                  placeholder="Apple"
-                  required
-                />
-
-              </div>
-
-
-              <div className="form-group">
-
-                <label htmlFor="model">
-                  Modèle
-                </label>
-
-                <input
-                  id="model"
-                  name="model"
-                  type="text"
-                  value={product.model}
-                  onChange={handleChange}
-                  placeholder="iPhone 17"
-                  required
-                />
-
-              </div>
+              <input
+                type="text"
+                name="color"
+                placeholder="Noir"
+                value={product.color}
+                onChange={handleChange}
+                required
+              />
 
             </div>
 
+            <div className="admin-field">
 
-            <div className="form-row">
+              <label>Stockage</label>
 
-              <div className="form-group">
-
-                <label htmlFor="year">
-                  Année
-                </label>
-
-                <input
-                  id="year"
-                  name="year"
-                  type="number"
-                  value={product.year}
-                  onChange={handleChange}
-                  placeholder="2026"
-                  required
-                />
-
-              </div>
-
-
-              <div className="form-group">
-
-                <label htmlFor="color">
-                  Couleur
-                </label>
-
-                <input
-                  id="color"
-                  name="color"
-                  type="text"
-                  value={product.color}
-                  onChange={handleChange}
-                  placeholder="Noir"
-                  required
-                />
-
-              </div>
+              <input
+                type="text"
+                name="storage"
+                placeholder="256 Go"
+                value={product.storage}
+                onChange={handleChange}
+                required
+              />
 
             </div>
 
-          </section>
+            <div className="admin-field">
 
+              <label>Taille d'écran</label>
 
-          {/* CARACTÉRISTIQUES */}
-
-          <section className="admin-section">
-
-            <h2>Caractéristiques</h2>
-
-            <div className="form-row">
-
-              <div className="form-group">
-
-                <label htmlFor="storage">
-                  Stockage
-                </label>
-
-                <input
-                  id="storage"
-                  name="storage"
-                  type="text"
-                  value={product.storage}
-                  onChange={handleChange}
-                  placeholder="256 Go"
-                  required
-                />
-
-              </div>
-
-
-              <div className="form-group">
-
-                <label htmlFor="screen">
-                  Écran
-                </label>
-
-                <input
-                  id="screen"
-                  name="screen"
-                  type="text"
-                  value={product.screen}
-                  onChange={handleChange}
-                  placeholder="6.3 pouces"
-                  required
-                />
-
-              </div>
+              <input
+                type="text"
+                name="screen"
+                placeholder='6.3 pouces'
+                value={product.screen}
+                onChange={handleChange}
+                required
+              />
 
             </div>
 
+            <div className="admin-field">
 
-            <div className="form-row">
+              <label>Connecteur</label>
 
-              <div className="form-group">
-
-                <label htmlFor="connector">
-                  Connecteur
-                </label>
-
-                <input
-                  id="connector"
-                  name="connector"
-                  type="text"
-                  value={product.connector}
-                  onChange={handleChange}
-                  placeholder="USB-C"
-                  required
-                />
-
-              </div>
-
-
-              <div className="form-group">
-
-                <label htmlFor="sim">
-                  SIM
-                </label>
-
-                <input
-                  id="sim"
-                  name="sim"
-                  type="text"
-                  value={product.sim}
-                  onChange={handleChange}
-                  placeholder="Nano-SIM + eSIM"
-                  required
-                />
-
-              </div>
+              <input
+                type="text"
+                name="connector"
+                placeholder="USB-C"
+                value={product.connector}
+                onChange={handleChange}
+                required
+              />
 
             </div>
 
-          </section>
+            <div className="admin-field">
 
+              <label>SIM</label>
 
-          {/* MESSAGES */}
+              <input
+                type="text"
+                name="sim"
+                placeholder="Nano-SIM + eSIM"
+                value={product.sim}
+                onChange={handleChange}
+                required
+              />
 
-          {message && (
-            <div className="admin-success">
-              {message}
             </div>
-          )}
 
-          {error && (
-            <div className="admin-error">
-              {error}
-            </div>
-          )}
+          </div>
 
+        </div>
 
-          {/* BOUTON */}
+        <div className="admin-section">
+
+          <h3>Description</h3>
+
+          <textarea
+            name="description"
+            placeholder="Description du produit..."
+            value={product.description}
+            onChange={handleChange}
+            rows="6"
+            required
+          />
+
+        </div>
+
+        <div className="admin-actions">
+
+          <button
+            type="button"
+            className="admin-cancel"
+            onClick={resetForm}
+          >
+            Annuler
+          </button>
 
           <button
             type="submit"
@@ -568,11 +775,475 @@ function Admin() {
             disabled={loading}
           >
             {loading
-              ? 'Création en cours...'
-              : 'Ajouter le produit'}
+              ? 'Enregistrement...'
+              : editingProduct
+                ? 'Enregistrer les modifications'
+                : 'Créer le produit'
+            }
           </button>
 
-        </form>
+        </div>
+
+      </form>
+
+    </section>
+
+  )
+
+  /*
+   * Liste des produits
+   */
+  const renderProducts = () => (
+
+    <section className="admin-products">
+
+      <div className="admin-section-title">
+
+        <div>
+
+          <h2>Gestion des produits</h2>
+
+          <p>
+            Ajoutez, modifiez ou supprimez les produits du catalogue.
+          </p>
+
+        </div>
+
+        <button
+          className="admin-add-button"
+          onClick={() => {
+
+            setProduct(emptyProduct)
+            setEditingProduct(null)
+            setShowForm(true)
+
+          }}
+        >
+          + Ajouter un produit
+        </button>
+
+      </div>
+
+      {message && (
+        <div className="admin-message admin-success">
+          {message}
+        </div>
+      )}
+
+      {error && (
+        <div className="admin-message admin-error">
+          {error}
+        </div>
+      )}
+
+      {products.length === 0 ? (
+
+        <div className="admin-empty">
+
+          <h3>Aucun produit</h3>
+
+          <p>
+            Commencez par ajouter votre premier produit.
+          </p>
+
+          <button
+            className="admin-add-button"
+            onClick={() => setShowForm(true)}
+          >
+            Ajouter un produit
+          </button>
+
+        </div>
+
+      ) : (
+
+        <div className="admin-table-container">
+
+          <table className="admin-table">
+
+            <thead>
+
+              <tr>
+
+                <th>ID</th>
+                <th>Produit</th>
+                <th>Catégorie</th>
+                <th>Prix</th>
+                <th>Stock</th>
+                <th>Actions</th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              {products.map((item) => (
+
+                <tr key={item.id}>
+
+                  <td>#{item.id}</td>
+
+                  <td>
+
+                    <strong>
+                      {item.name}
+                    </strong>
+
+                    <small>
+                      {item.brand} · {item.model}
+                    </small>
+
+                  </td>
+
+                  <td>
+
+                    <span>
+                      {item.category}
+                    </span>
+
+                    <small>
+                      {item.subcategory}
+                    </small>
+
+                  </td>
+
+                  <td>
+                    {(item.price / 100).toFixed(2)} €
+                  </td>
+
+                  <td>
+
+                    <span
+                      className={
+                        Number(item.stock) <= 5
+                          ? 'stock-low'
+                          : 'stock-ok'
+                      }
+                    >
+                      {item.stock}
+                    </span>
+
+                  </td>
+
+                  <td>
+
+                    <div className="admin-table-actions">
+
+                      <button
+                        className="admin-edit"
+                        onClick={() =>
+                          handleEdit(item)
+                        }
+                      >
+                        Modifier
+                      </button>
+
+                      <button
+                        className="admin-delete"
+                        onClick={() =>
+                          handleDelete(item.id)
+                        }
+                      >
+                        Supprimer
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              ))}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      )}
+
+    </section>
+
+  )
+
+  /*
+   * Dashboard
+   */
+  const renderDashboard = () => (
+
+    <section className="admin-dashboard">
+
+      <div className="admin-section-title">
+
+        <div>
+
+          <h2>Dashboard</h2>
+
+          <p>
+            Vue d'ensemble de votre boutique Reboot.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div className="admin-stat-grid">
+
+        <div className="admin-stat-card">
+
+          <span>Produits</span>
+
+          <strong>{totalProducts}</strong>
+
+          <small>
+            produits dans le catalogue
+          </small>
+
+        </div>
+
+        <div className="admin-stat-card">
+
+          <span>Stock</span>
+
+          <strong>{totalStock}</strong>
+
+          <small>
+            unités disponibles
+          </small>
+
+        </div>
+
+        <div className="admin-stat-card">
+
+          <span>Catégories</span>
+
+          <strong>{totalCategories}</strong>
+
+          <small>
+            catégories utilisées
+          </small>
+
+        </div>
+
+        <div className="admin-stat-card">
+
+          <span>Stock faible</span>
+
+          <strong>{lowStock}</strong>
+
+          <small>
+            produits à surveiller
+          </small>
+
+        </div>
+
+      </div>
+
+      <div className="admin-dashboard-card">
+
+        <h3>Derniers produits</h3>
+
+        {products.slice(-5).reverse().map(
+          (product) => (
+
+            <div
+              className="admin-dashboard-product"
+              key={product.id}
+            >
+
+              <div>
+
+                <strong>
+                  {product.name}
+                </strong>
+
+                <span>
+                  {product.category} · {product.subcategory}
+                </span>
+
+              </div>
+
+              <strong>
+                {(product.price / 100).toFixed(2)} €
+              </strong>
+
+            </div>
+
+          )
+        )}
+
+      </div>
+
+    </section>
+
+  )
+
+  return (
+
+    <div className="admin">
+
+      <Header />
+
+      <Navbar />
+
+      <main className="admin-page">
+
+        <div className="admin-layout">
+
+          {/* SIDEBAR */}
+
+          <aside className="admin-sidebar">
+
+            <div className="admin-sidebar-title">
+
+              <h1>Dashboard</h1>
+
+            </div>
+
+            <nav>
+
+              <button
+                className={
+                  activePage === 'dashboard'
+                    ? 'active'
+                    : ''
+                }
+                onClick={() =>
+                  setActivePage('dashboard')
+                }
+              >
+                Dashboard
+              </button>
+
+              <button
+                className={
+                  activePage === 'products'
+                    ? 'active'
+                    : ''
+                }
+                onClick={() => {
+                  setActivePage('products')
+                  setShowForm(false)
+                }}
+              >
+                Produits
+              </button>
+
+              <button
+                onClick={() =>
+                  setActivePage('orders')
+                }
+              >
+                Commandes
+              </button>
+
+              <button
+                onClick={() =>
+                  setActivePage('customers')
+                }
+              >
+                Clients
+              </button>
+
+              <button
+                onClick={() =>
+                  setActivePage('stock')
+                }
+              >
+                Stocks
+              </button>
+
+              <button
+                onClick={() =>
+                  setActivePage('categories')
+                }
+              >
+                Catégories
+              </button>
+
+            </nav>
+
+          </aside>
+
+          {/* CONTENU */}
+
+          <div className="admin-content">
+
+            {activePage === 'dashboard' &&
+              renderDashboard()
+            }
+
+            {activePage === 'products' &&
+              !showForm &&
+              renderProducts()
+            }
+
+            {activePage === 'products' &&
+              showForm &&
+              renderProductForm()
+            }
+
+            {activePage === 'orders' && (
+
+              <div className="admin-coming-soon">
+
+                <h2>Commandes</h2>
+
+                <p>
+                  La gestion des commandes sera disponible prochainement.
+                </p>
+
+              </div>
+
+            )}
+
+            {activePage === 'customers' && (
+
+              <div className="admin-coming-soon">
+
+                <h2>Clients</h2>
+
+                <p>
+                  La gestion des clients sera disponible prochainement.
+                </p>
+
+              </div>
+
+            )}
+
+            {activePage === 'stock' && (
+
+              <div className="admin-coming-soon">
+
+                <h2>Stocks</h2>
+
+                <p>
+                  La gestion avancée des stocks sera disponible prochainement.
+                </p>
+
+              </div>
+
+            )}
+
+            {activePage === 'categories' && (
+
+              <div className="admin-coming-soon">
+
+                <h2>Catégories</h2>
+
+                <p>
+                  La gestion des catégories sera disponible prochainement.
+                </p>
+
+              </div>
+
+            )}
+
+          </div>
+
+        </div>
 
       </main>
 
