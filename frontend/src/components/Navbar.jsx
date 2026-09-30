@@ -53,7 +53,7 @@ function Navbar() {
 
       {/* CONSOLE */}
       <div className="nav-dropdown">
-        <a href="#" className="nav-link">
+        <a href="console" className="nav-link">
           Console
         </a>
 
