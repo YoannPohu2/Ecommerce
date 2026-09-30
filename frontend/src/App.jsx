@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Smartphone from './pages/Smartphone'
 import Iphone from './pages/Iphone'
 import Admin from './pages/Admin'
+import Laptop from './pages/Laptop'
 
 
 function App() {
@@ -14,6 +15,8 @@ function App() {
         <Route path="/" element={<Home />} />
 
         <Route path="/smartphone" element={<Smartphone />} />
+        
+        <Route path='/laptop' element={<Laptop/>} />
 
         <Route path="/smartphone/iphone" element={<Iphone />}/>
 

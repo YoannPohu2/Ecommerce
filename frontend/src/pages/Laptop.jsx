@@ -4,9 +4,9 @@ import Header from '../components/Header'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-function Smartphone() {
+function Laptop() {
   return (
-    <div className="smartphone">
+    <div className="laptop">
 
       <Header />
 
@@ -15,68 +15,57 @@ function Smartphone() {
       <main className="category-page">
 
         <section className="category-header">
-          <h1>Smartphones</h1>
+          <h1>Ordinateurs portables</h1>
 
           <p>
-            Découvrez notre sélection de smartphones.
+            Découvrez notre sélection d'ordinateurs portables.
           </p>
         </section>
 
         <section className="category-list">
 
           <a
-            href="/smartphone/iphone"
+            href="/laptop/macbook"
             className="category-card"
           >
             <div className="category-image">
               Image
             </div>
 
-            <h2>iPhone</h2>
+            <h2>MacBook</h2>
           </a>
 
           <a
-            href="/smartphone/samsung"
+            href="/laptop/windows"
             className="category-card"
           >
             <div className="category-image">
               Image
             </div>
 
-            <h2>Samsung Galaxy</h2>
+            <h2>Ordinateurs portables Windows</h2>
           </a>
 
           <a
-            href="/smartphone/google-pixel"
+            href="/laptop/accessoires"
             className="category-card"
           >
             <div className="category-image">
               Image
             </div>
 
-            <h2>Google Pixel</h2>
+            <h2>Périphériques & Accessoires</h2>
           </a>
 
           <a
-            href="/smartphone/android"
+            href="/laptop/gaming"
             className="category-card"
           >
             <div className="category-image">
               Image
             </div>
 
-            <h2>Smartphones Android</h2>
-          </a>
-
-          <a
-            href="/smartphone/accessoires"
-            className="category-card"
-          >
-            <div className="category-image">
-              Image
-            </div>
-
-            <h2>Accessoires smartphone</h2>
+            <h2>Ordinateurs portables gaming</h2>
           </a>
 
         </section>
@@ -89,4 +78,4 @@ function Smartphone() {
   )
 }
 
-export default Smartphone
+export default Laptop

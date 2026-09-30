@@ -1,25 +1,25 @@
-.smartphone-page {
+.category-page {
   width: 100%;
   min-height: 600px;
   padding: 70px 40px;
 }
 
-.smartphone-header {
+.category-header {
   max-width: 1250px;
   margin: 0 auto 50px;
 }
 
-.smartphone-header h1 {
+.category-header h1 {
   font-size: 42px;
   margin-bottom: 15px;
 }
 
-.smartphone-header p {
+.category-header p {
   color: #666;
   font-size: 17px;
 }
 
-.smartphone-categories {
+.category-list {
   max-width: 1250px;
   margin: 0 auto;
 
@@ -28,7 +28,7 @@
   gap: 20px;
 }
 
-.smartphone-category {
+.category-card {
   padding: 20px;
 
   border: 1px solid #e5e5e5;
@@ -41,12 +41,12 @@
     border-color 0.2s ease;
 }
 
-.smartphone-category:hover {
+.category-card:hover {
   transform: translateY(-4px);
   border-color: #000;
 }
 
-.smartphone-category-image {
+.category-image {
   width: 100%;
   height: 220px;
 
@@ -62,22 +62,22 @@
   color: #888;
 }
 
-.smartphone-category h2 {
+.category-card h2 {
   font-size: 19px;
 }
 
 @media (max-width: 800px) {
-  .smartphone-categories {
+  .category-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 500px) {
-  .smartphone-page {
+  .category-page {
     padding: 50px 25px;
   }
 
-  .smartphone-categories {
+  .category-list {
     grid-template-columns: 1fr;
   }
 }
