@@ -54,25 +54,25 @@ function Home() {
               <h3>Smartphones</h3>
             </a>
 
-            <div className="category-card">
+            <a href="/laptop" className="category-card">
               <span>💻</span>
               <h3>Ordinateurs portables</h3>
-            </div>
+            </a>
 
-            <div className="category-card">
+            <a href="/tablet"  className="category-card">
               <span>📱</span>
               <h3>Tablettes</h3>
-            </div>
+            </a>
 
-            <div className="category-card">
+            <a href="/console"  className="category-card">
               <span>🎮</span>
               <h3>Consoles</h3>
-            </div>
+            </a>
 
-            <div className="category-card">
+            <a href="/watch"  className="category-card">
               <span>⌚</span>
               <h3>Montres connectées</h3>
-            </div>
+            </a>
 
           </div>
 

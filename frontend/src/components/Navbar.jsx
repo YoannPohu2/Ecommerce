@@ -69,7 +69,7 @@ function Navbar() {
 
       {/* MONTRE CONNECTÉE */}
       <div className="nav-dropdown">
-        <a href="#" className="nav-link">
+        <a href="watch" className="nav-link">
           Montre connectée
         </a>
 
