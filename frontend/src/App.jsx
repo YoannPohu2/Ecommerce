@@ -8,6 +8,7 @@ import Laptop from './pages/Laptop'
 import Tablet from './pages/Tablet'
 import Console from './pages/Console'
 import Watch from './pages/Watch'
+import SamsungGalaxy from './pages/SamsungGalaxy'
 
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
           <Route path='/watch' element={<Watch/>} />
 
         <Route path="/smartphone/iphone" element={<Iphone />}/>
+
+        <Route path="/smartphone/samsung" element={<SamsungGalaxy />}/>
 
         <Route path="/admin" element={<Admin />} />
         

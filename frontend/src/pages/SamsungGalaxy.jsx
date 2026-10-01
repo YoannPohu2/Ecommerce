@@ -6,7 +6,7 @@ import Footer from '../components/Footer'
 
 import '../css/subcategory.css'
 
-function Iphone() {
+function SamsungGalaxy() {
   const [products, setProducts] = useState([])
 
   const [loading, setLoading] = useState(true)
@@ -27,9 +27,6 @@ function Iphone() {
 
   const [filters, setFilters] = useState({})
 
-  /*
-   * Récupérer les produits depuis Symfony
-   */
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -65,9 +62,6 @@ function Iphone() {
     fetchProducts()
   }, [])
 
-  /*
-   * Appliquer les filtres
-   */
   const handleFilter = () => {
     setFilters({
       priceMin,
@@ -82,9 +76,6 @@ function Iphone() {
     })
   }
 
-  /*
-   * Réinitialiser les filtres
-   */
   const resetFilters = () => {
     setPriceMin('')
     setPriceMax('')
@@ -99,15 +90,13 @@ function Iphone() {
     setFilters({})
   }
 
-  /*
-   * Filtrer les produits
-   */
   let filteredProducts = products.filter((product) => {
+
     if (product.category !== 'Smartphone') {
       return false
     }
 
-    if (product.subcategory !== 'iPhone') {
+    if (product.subcategory !== 'Samsung') {
       return false
     }
 
@@ -174,9 +163,6 @@ function Iphone() {
     return true
   })
 
-  /*
-   * Trier les produits
-   */
   if (sort === 'price-asc') {
     filteredProducts.sort((a, b) => a.price - b.price)
   }
@@ -185,9 +171,6 @@ function Iphone() {
     filteredProducts.sort((a, b) => b.price - a.price)
   }
 
-  /*
-   * Prix stocké en centimes
-   */
   const formatPrice = (price) => {
     return (price / 100).toFixed(2)
   }
@@ -203,17 +186,15 @@ function Iphone() {
 
         <div className="subcategory-title">
 
-          <h1>iPhone</h1>
+          <h1>Samsung Galaxy</h1>
 
           <p>
-            Découvrez notre sélection d'iPhone reconditionnés.
+            Découvrez notre sélection de Samsung Galaxy reconditionnés.
           </p>
 
         </div>
 
         <section className="subcategory-content">
-
-          {/* FILTRES */}
 
           <aside className="subcategory-filters">
 
@@ -262,19 +243,14 @@ function Iphone() {
                   Tous les modèles
                 </option>
 
-                {Array.from(
-                  { length: 10 },
-                  (_, index) => 17 - index
-                ).map((number) => (
-
-                  <option
-                    key={number}
-                    value={`iPhone ${number}`}
-                  >
-                    iPhone {number}
-                  </option>
-
-                ))}
+                <option value="Galaxy S26">Galaxy S26</option>
+                <option value="Galaxy S25">Galaxy S25</option>
+                <option value="Galaxy S24">Galaxy S24</option>
+                <option value="Galaxy S23">Galaxy S23</option>
+                <option value="Galaxy S22">Galaxy S22</option>
+                <option value="Galaxy S21">Galaxy S21</option>
+                <option value="Galaxy S20">Galaxy S20</option>
+                <option value="Galaxy Note 20">Galaxy Note 20</option>
 
               </select>
 
@@ -328,13 +304,12 @@ function Iphone() {
                   Toutes les tailles
                 </option>
 
-                <option value='4.7"'>4.7"</option>
-                <option value='5.4"'>5.4"</option>
-                <option value='5.8"'>5.8"</option>
                 <option value='6.1"'>6.1"</option>
-                <option value='6.3"'>6.3"</option>
+                <option value='6.2"'>6.2"</option>
+                <option value='6.4"'>6.4"</option>
+                <option value='6.6"'>6.6"</option>
                 <option value='6.7"'>6.7"</option>
-                <option value='6.9"'>6.9"</option>
+                <option value='6.8"'>6.8"</option>
 
               </select>
 
@@ -355,13 +330,10 @@ function Iphone() {
                   Toutes les capacités
                 </option>
 
-                <option value="32 Go">32 Go</option>
-                <option value="64 Go">64 Go</option>
                 <option value="128 Go">128 Go</option>
                 <option value="256 Go">256 Go</option>
                 <option value="512 Go">512 Go</option>
                 <option value="1 To">1 To</option>
-                <option value="2 To">2 To</option>
 
               </select>
 
@@ -412,10 +384,6 @@ function Iphone() {
                   USB-C
                 </option>
 
-                <option value="Lightning">
-                  Lightning
-                </option>
-
               </select>
 
             </div>
@@ -463,8 +431,6 @@ function Iphone() {
 
           </aside>
 
-          {/* PRODUITS */}
-
           <section className="subcategory-products">
 
             <div className="products-toolbar">
@@ -492,23 +458,17 @@ function Iphone() {
 
             </div>
 
-            {/* CHARGEMENT */}
-
             {loading && (
               <div className="subcategory-message">
                 Chargement des produits...
               </div>
             )}
 
-            {/* ERREUR */}
-
             {!loading && error && (
               <div className="subcategory-message">
                 {error}
               </div>
             )}
-
-            {/* PRODUITS */}
 
             {!loading &&
               !error &&
@@ -555,14 +515,12 @@ function Iphone() {
 
               )}
 
-            {/* AUCUN PRODUIT */}
-
             {!loading &&
               !error &&
               filteredProducts.length === 0 && (
 
                 <div className="subcategory-message">
-                  Aucun iPhone ne correspond à vos critères.
+                  Aucun Samsung Galaxy ne correspond à vos critères.
                 </div>
 
               )}
@@ -579,4 +537,4 @@ function Iphone() {
   )
 }
 
-export default Iphone
+export default SamsungGalaxy
