@@ -3,37 +3,47 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Smartphone from './pages/Smartphone'
 import Iphone from './pages/Iphone'
-import Admin from './pages/Admin'
+import SamsungGalaxy from './pages/SamsungGalaxy'
+import GooglePixel from './pages/GooglePixel'
+import SmartphoneAndroid from './pages/SmartphoneAndroid'
+
 import Laptop from './pages/Laptop'
 import Tablet from './pages/Tablet'
 import Console from './pages/Console'
 import Watch from './pages/Watch'
-import SamsungGalaxy from './pages/SamsungGalaxy'
 
+import Admin from './pages/Admin'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
 
+        {/* Accueil */}
         <Route path="/" element={<Home />} />
 
+        {/* Smartphones */}
         <Route path="/smartphone" element={<Smartphone />} />
+        <Route path="/smartphone/iphone" element={<Iphone />} />
+        <Route path="/smartphone/samsung" element={<SamsungGalaxy />} />
+        <Route path="/smartphone/google-pixel" element={<GooglePixel />} />
+        <Route path="/smartphone/android" element={<SmartphoneAndroid />}
+/>
 
-        <Route path='/laptop' element={<Laptop/>} />
+        {/* Ordinateurs portables */}
+        <Route path="/laptop" element={<Laptop />} />
 
-        <Route path='/tablet' element={<Tablet/>} />
+        {/* Tablettes */}
+        <Route path="/tablet" element={<Tablet />} />
 
-         <Route path='/console' element={<Console/>} />
+        {/* Consoles */}
+        <Route path="/console" element={<Console />} />
 
-          <Route path='/watch' element={<Watch/>} />
+        {/* Montres connectées */}
+        <Route path="/watch" element={<Watch />} />
 
-        <Route path="/smartphone/iphone" element={<Iphone />}/>
-
-        <Route path="/smartphone/samsung" element={<SamsungGalaxy />}/>
-
+        {/* Administration */}
         <Route path="/admin" element={<Admin />} />
-        
 
       </Routes>
     </BrowserRouter>
