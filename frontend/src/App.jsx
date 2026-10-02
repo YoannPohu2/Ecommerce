@@ -6,6 +6,7 @@ import Iphone from './pages/Iphone'
 import SamsungGalaxy from './pages/SamsungGalaxy'
 import GooglePixel from './pages/GooglePixel'
 import SmartphoneAndroid from './pages/SmartphoneAndroid'
+import SmartphoneAccessories from './pages/SmartphoneAccessories'
 
 import Laptop from './pages/Laptop'
 import Tablet from './pages/Tablet'
@@ -27,8 +28,8 @@ function App() {
         <Route path="/smartphone/iphone" element={<Iphone />} />
         <Route path="/smartphone/samsung" element={<SamsungGalaxy />} />
         <Route path="/smartphone/google-pixel" element={<GooglePixel />} />
-        <Route path="/smartphone/android" element={<SmartphoneAndroid />}
-/>
+        <Route path="/smartphone/android" element={<SmartphoneAndroid />}/>
+        <Route path="/smartphone/accessoires" element={<SmartphoneAccessories />}/>
 
         {/* Ordinateurs portables */}
         <Route path="/laptop" element={<Laptop />} />
