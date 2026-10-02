@@ -90,6 +90,30 @@ class ProductController
     }
 
     /**
+     * Récupérer un produit
+     *
+     * @Route("/api/products/{id}", methods={"GET"})
+     */
+    public function show(
+        int $id,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
+        $product = $entityManager
+            ->getRepository(Product::class)
+            ->find($id);
+
+        if (!$product) {
+            return new JsonResponse([
+                'message' => 'Produit introuvable.'
+            ], 404);
+        }
+
+        return new JsonResponse([
+            'product' => $this->serializeProduct($product)
+        ]);
+    }
+
+    /**
      * Modifier un produit
      *
      * @Route("/api/products/{id}", methods={"PUT"})

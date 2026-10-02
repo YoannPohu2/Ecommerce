@@ -1,0 +1,472 @@
+/* =========================
+   LAYOUT
+========================= */
+
+.product-layout {
+  min-height: 100vh;
+
+  display: flex;
+
+  flex-direction: column;
+}
+
+.product-page {
+  flex: 1;
+
+  width: 100%;
+
+  padding: 70px 40px;
+
+  background: #fff;
+}
+
+.product-detail {
+  max-width: 1250px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 70px;
+}
+
+
+/* =========================
+   GALERIE
+========================= */
+
+.product-gallery {
+  width: 100%;
+}
+
+.product-main-image {
+  width: 100%;
+
+  height: 500px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #f5f5f5;
+
+  border-radius: 8px;
+
+  color: #888;
+
+  font-size: 18px;
+}
+
+.product-thumbnails {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 15px;
+}
+
+.product-thumbnails div {
+  width: 90px;
+  height: 90px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: #f5f5f5;
+
+  border: 1px solid #e5e5e5;
+
+  border-radius: 6px;
+
+  color: #888;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  transition: border-color 0.2s ease;
+}
+
+.product-thumbnails div:hover {
+  border-color: #000;
+}
+
+
+/* =========================
+   INFORMATIONS PRODUIT
+========================= */
+
+.product-info {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.product-info h1 {
+  margin: 0 0 20px;
+
+  font-size: 36px;
+
+  line-height: 1.2;
+}
+
+.product-description {
+  margin-bottom: 30px;
+
+  color: #666;
+
+  font-size: 16px;
+
+  line-height: 1.6;
+}
+
+.product-price {
+  margin-bottom: 15px;
+
+  font-size: 32px;
+
+  font-weight: 700;
+}
+
+.product-stock {
+  margin-bottom: 30px;
+
+  font-size: 15px;
+
+  color: #555;
+}
+
+
+/* =========================
+   VARIANTES
+========================= */
+
+.product-variants {
+  margin-bottom: 30px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid #e5e5e5;
+}
+
+.product-variants h2 {
+  margin-bottom: 20px;
+
+  font-size: 20px;
+}
+
+.variant-group {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.variant-group div {
+  font-size: 15px;
+
+  color: #555;
+}
+
+.variant-group strong {
+  color: #000;
+}
+
+
+/* =========================
+   BOUTON PANIER
+========================= */
+
+.add-to-cart-button {
+  width: 100%;
+
+  padding: 16px 20px;
+
+  border: none;
+
+  border-radius: 6px;
+
+  background: #000;
+
+  color: #fff;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: background 0.2s ease;
+}
+
+.add-to-cart-button:hover {
+  background: #333;
+}
+
+.add-to-cart-button:disabled {
+  background: #ccc;
+
+  color: #666;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================
+   CARACTÉRISTIQUES
+========================= */
+
+.product-specifications {
+  max-width: 1250px;
+
+  margin: 90px auto 0;
+
+  padding-top: 45px;
+
+  border-top: 1px solid #e5e5e5;
+}
+
+.product-specifications h2 {
+  margin: 0 0 30px;
+
+  font-size: 30px;
+
+  line-height: 1.2;
+
+  font-weight: 700;
+}
+
+
+/* =========================
+   LISTE CARACTÉRISTIQUES
+========================= */
+
+.specifications-list {
+  width: 100%;
+
+  border-top: 1px solid #e5e5e5;
+}
+
+
+/* =========================
+   LIGNE
+========================= */
+
+.specification-row {
+  display: grid;
+
+  grid-template-columns:
+    160px
+    1fr
+    160px
+    1fr;
+
+  min-height: 70px;
+
+  align-items: center;
+
+  border-bottom: 1px solid #e5e5e5;
+}
+
+
+/* =========================
+   LABEL
+========================= */
+
+.specification-label {
+  padding: 20px 15px 20px 0;
+
+  font-size: 15px;
+
+  font-weight: 700;
+
+  color: #222;
+}
+
+
+/* =========================
+   VALEUR
+========================= */
+
+.specification-value {
+  padding: 20px 25px 20px 0;
+
+  font-size: 15px;
+
+  color: #666;
+
+  line-height: 1.4;
+}
+
+
+/* =========================
+   HOVER LIGNE
+========================= */
+
+.specification-row:hover {
+  background: #fafafa;
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+.product-message {
+  max-width: 1250px;
+
+  margin: 100px auto;
+
+  text-align: center;
+
+  font-size: 18px;
+
+  color: #666;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .product-page {
+    padding: 50px 25px;
+  }
+
+  .product-detail {
+    grid-template-columns: 1fr;
+
+    gap: 40px;
+  }
+
+  .product-main-image {
+    height: 400px;
+  }
+
+  .product-info h1 {
+    font-size: 30px;
+  }
+
+  .product-specifications {
+    margin-top: 70px;
+  }
+
+  .specification-row {
+    grid-template-columns:
+      140px
+      1fr
+      140px
+      1fr;
+  }
+
+}
+
+
+/* =========================
+   TABLETTE
+========================= */
+
+@media (max-width: 700px) {
+
+  .product-specifications {
+    margin-top: 60px;
+
+    padding-top: 35px;
+  }
+
+  .product-specifications h2 {
+    font-size: 26px;
+  }
+
+  .specification-row {
+    grid-template-columns:
+      130px
+      1fr;
+
+    min-height: 60px;
+  }
+
+  .specification-label {
+    padding: 17px 15px 17px 0;
+  }
+
+  .specification-value {
+    padding: 17px 0;
+  }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+  .product-page {
+    padding: 40px 20px;
+  }
+
+  .product-main-image {
+    height: 300px;
+  }
+
+  .product-thumbnails div {
+    width: 70px;
+    height: 70px;
+  }
+
+  .product-info h1 {
+    font-size: 26px;
+  }
+
+  .product-price {
+    font-size: 28px;
+  }
+
+  .product-specifications {
+    margin-top: 50px;
+
+    padding-top: 30px;
+  }
+
+  .product-specifications h2 {
+    font-size: 24px;
+
+    margin-bottom: 25px;
+  }
+
+  /*
+   * Sur mobile, chaque information
+   * devient une ligne indépendante.
+   */
+
+  .specification-row {
+    display: block;
+
+    padding: 15px 0;
+  }
+
+  .specification-label {
+    display: block;
+
+    padding: 0;
+
+    margin-bottom: 5px;
+  }
+
+  .specification-value {
+    display: block;
+
+    padding: 0;
+  }
+
+}

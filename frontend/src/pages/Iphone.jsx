@@ -28,7 +28,7 @@ function Iphone() {
   const [filters, setFilters] = useState({})
 
   /*
-   * Récupérer les produits depuis Symfony
+   * Récupération des produits depuis Symfony
    */
   useEffect(() => {
     const fetchProducts = async () => {
@@ -44,7 +44,9 @@ function Iphone() {
         })
 
         if (!response.ok) {
-          throw new Error('Impossible de récupérer les produits.')
+          throw new Error(
+            'Impossible de récupérer les produits.'
+          )
         }
 
         const data = await response.json()
@@ -66,7 +68,7 @@ function Iphone() {
   }, [])
 
   /*
-   * Appliquer les filtres
+   * Application des filtres
    */
   const handleFilter = () => {
     setFilters({
@@ -83,7 +85,7 @@ function Iphone() {
   }
 
   /*
-   * Réinitialiser les filtres
+   * Réinitialisation des filtres
    */
   const resetFilters = () => {
     setPriceMin('')
@@ -100,17 +102,26 @@ function Iphone() {
   }
 
   /*
-   * Filtrer les produits
+   * Filtrage des produits
    */
   let filteredProducts = products.filter((product) => {
+    /*
+     * Catégorie
+     */
     if (product.category !== 'Smartphone') {
       return false
     }
 
+    /*
+     * Sous-catégorie
+     */
     if (product.subcategory !== 'iPhone') {
       return false
     }
 
+    /*
+     * Prix minimum
+     */
     if (
       filters.priceMin &&
       product.price / 100 < Number(filters.priceMin)
@@ -118,6 +129,9 @@ function Iphone() {
       return false
     }
 
+    /*
+     * Prix maximum
+     */
     if (
       filters.priceMax &&
       product.price / 100 > Number(filters.priceMax)
@@ -125,10 +139,19 @@ function Iphone() {
       return false
     }
 
-    if (filters.model && product.model !== filters.model) {
+    /*
+     * Modèle
+     */
+    if (
+      filters.model &&
+      product.model !== filters.model
+    ) {
       return false
     }
 
+    /*
+     * Année
+     */
     if (
       filters.year &&
       product.year !== Number(filters.year)
@@ -136,6 +159,9 @@ function Iphone() {
       return false
     }
 
+    /*
+     * Taille d'écran
+     */
     if (
       filters.screen &&
       product.screen !== filters.screen
@@ -143,6 +169,9 @@ function Iphone() {
       return false
     }
 
+    /*
+     * Stockage
+     */
     if (
       filters.storage &&
       product.storage !== filters.storage
@@ -150,6 +179,9 @@ function Iphone() {
       return false
     }
 
+    /*
+     * Couleur
+     */
     if (
       filters.color &&
       product.color !== filters.color
@@ -157,6 +189,9 @@ function Iphone() {
       return false
     }
 
+    /*
+     * Connecteur
+     */
     if (
       filters.connector &&
       product.connector !== filters.connector
@@ -164,6 +199,9 @@ function Iphone() {
       return false
     }
 
+    /*
+     * Carte SIM
+     */
     if (
       filters.sim &&
       product.sim !== filters.sim
@@ -175,18 +213,24 @@ function Iphone() {
   })
 
   /*
-   * Trier les produits
+   * Tri par prix
    */
   if (sort === 'price-asc') {
-    filteredProducts.sort((a, b) => a.price - b.price)
+    filteredProducts.sort(
+      (a, b) => a.price - b.price
+    )
   }
 
   if (sort === 'price-desc') {
-    filteredProducts.sort((a, b) => b.price - a.price)
+    filteredProducts.sort(
+      (a, b) => b.price - a.price
+    )
   }
 
   /*
-   * Prix stocké en centimes
+   * Format du prix
+   *
+   * Symfony enregistre le prix en centimes.
    */
   const formatPrice = (price) => {
     return (price / 100).toFixed(2)
@@ -194,33 +238,30 @@ function Iphone() {
 
   return (
     <div className="subcategory">
-
       <Header />
 
       <Navbar />
 
       <main className="subcategory-page">
 
+        {/* TITRE */}
         <div className="subcategory-title">
-
           <h1>iPhone</h1>
 
           <p>
             Découvrez notre sélection d'iPhone reconditionnés.
           </p>
-
         </div>
 
         <section className="subcategory-content">
 
           {/* FILTRES */}
-
           <aside className="subcategory-filters">
 
             <h2>Filtrer</h2>
 
+            {/* PRIX */}
             <div className="filter-group">
-
               <label>Prix</label>
 
               <div className="price-inputs">
@@ -244,9 +285,9 @@ function Iphone() {
                 />
 
               </div>
-
             </div>
 
+            {/* MODÈLE */}
             <div className="filter-group">
 
               <label>Modèle</label>
@@ -266,20 +307,19 @@ function Iphone() {
                   { length: 10 },
                   (_, index) => 17 - index
                 ).map((number) => (
-
                   <option
                     key={number}
                     value={`iPhone ${number}`}
                   >
                     iPhone {number}
                   </option>
-
                 ))}
 
               </select>
 
             </div>
 
+            {/* ANNÉE */}
             <div className="filter-group">
 
               <label>Année de sortie</label>
@@ -299,20 +339,19 @@ function Iphone() {
                   { length: 11 },
                   (_, index) => 2026 - index
                 ).map((year) => (
-
                   <option
                     key={year}
                     value={year}
                   >
                     {year}
                   </option>
-
                 ))}
 
               </select>
 
             </div>
 
+            {/* ÉCRAN */}
             <div className="filter-group">
 
               <label>Taille d'écran</label>
@@ -328,21 +367,44 @@ function Iphone() {
                   Toutes les tailles
                 </option>
 
-                <option value='4.7"'>4.7"</option>
-                <option value='5.4"'>5.4"</option>
-                <option value='5.8"'>5.8"</option>
-                <option value='6.1"'>6.1"</option>
-                <option value='6.3"'>6.3"</option>
-                <option value='6.7"'>6.7"</option>
-                <option value='6.9"'>6.9"</option>
+                <option value='4.7"'>
+                  4.7"
+                </option>
+
+                <option value='5.4"'>
+                  5.4"
+                </option>
+
+                <option value='5.8"'>
+                  5.8"
+                </option>
+
+                <option value='6.1"'>
+                  6.1"
+                </option>
+
+                <option value='6.3"'>
+                  6.3"
+                </option>
+
+                <option value='6.7"'>
+                  6.7"
+                </option>
+
+                <option value='6.9"'>
+                  6.9"
+                </option>
 
               </select>
 
             </div>
 
+            {/* STOCKAGE */}
             <div className="filter-group">
 
-              <label>Capacité de stockage</label>
+              <label>
+                Capacité de stockage
+              </label>
 
               <select
                 value={storage}
@@ -355,18 +417,39 @@ function Iphone() {
                   Toutes les capacités
                 </option>
 
-                <option value="32 Go">32 Go</option>
-                <option value="64 Go">64 Go</option>
-                <option value="128 Go">128 Go</option>
-                <option value="256 Go">256 Go</option>
-                <option value="512 Go">512 Go</option>
-                <option value="1 To">1 To</option>
-                <option value="2 To">2 To</option>
+                <option value="32 Go">
+                  32 Go
+                </option>
+
+                <option value="64 Go">
+                  64 Go
+                </option>
+
+                <option value="128 Go">
+                  128 Go
+                </option>
+
+                <option value="256 Go">
+                  256 Go
+                </option>
+
+                <option value="512 Go">
+                  512 Go
+                </option>
+
+                <option value="1 To">
+                  1 To
+                </option>
+
+                <option value="2 To">
+                  2 To
+                </option>
 
               </select>
 
             </div>
 
+            {/* COULEUR */}
             <div className="filter-group">
 
               <label>Couleur</label>
@@ -382,17 +465,35 @@ function Iphone() {
                   Toutes les couleurs
                 </option>
 
-                <option value="Noir">Noir</option>
-                <option value="Blanc">Blanc</option>
-                <option value="Bleu">Bleu</option>
-                <option value="Violet">Violet</option>
-                <option value="Vert">Vert</option>
-                <option value="Gris">Gris</option>
+                <option value="Noir">
+                  Noir
+                </option>
+
+                <option value="Blanc">
+                  Blanc
+                </option>
+
+                <option value="Bleu">
+                  Bleu
+                </option>
+
+                <option value="Violet">
+                  Violet
+                </option>
+
+                <option value="Vert">
+                  Vert
+                </option>
+
+                <option value="Gris">
+                  Gris
+                </option>
 
               </select>
 
             </div>
 
+            {/* CONNECTEUR */}
             <div className="filter-group">
 
               <label>Connecteur</label>
@@ -420,6 +521,7 @@ function Iphone() {
 
             </div>
 
+            {/* SIM */}
             <div className="filter-group">
 
               <label>Carte SIM</label>
@@ -447,6 +549,7 @@ function Iphone() {
 
             </div>
 
+            {/* BOUTONS */}
             <button
               className="filter-button"
               onClick={handleFilter}
@@ -464,9 +567,9 @@ function Iphone() {
           </aside>
 
           {/* PRODUITS */}
-
           <section className="subcategory-products">
 
+            {/* BARRE DE TRI */}
             <div className="products-toolbar">
 
               <span>
@@ -493,7 +596,6 @@ function Iphone() {
             </div>
 
             {/* CHARGEMENT */}
-
             {loading && (
               <div className="subcategory-message">
                 Chargement des produits...
@@ -501,7 +603,6 @@ function Iphone() {
             )}
 
             {/* ERREUR */}
-
             {!loading && error && (
               <div className="subcategory-message">
                 {error}
@@ -509,7 +610,6 @@ function Iphone() {
             )}
 
             {/* PRODUITS */}
-
             {!loading &&
               !error &&
               filteredProducts.length > 0 && (
@@ -523,10 +623,12 @@ function Iphone() {
                       className="subcategory-card"
                     >
 
+                      {/* IMAGE */}
                       <div className="subcategory-card-image">
                         Image produit
                       </div>
 
+                      {/* INFORMATIONS */}
                       <div className="subcategory-card-content">
 
                         <h2>
@@ -534,16 +636,21 @@ function Iphone() {
                         </h2>
 
                         <p>
-                          {product.storage} · {product.color}
+                          {product.storage}
+                          {' · '}
+                          {product.color}
                         </p>
 
                         <span className="subcategory-card-price">
                           {formatPrice(product.price)} €
                         </span>
 
-                        <button>
+                        <a
+                          href={`/product/${product.id}`}
+                          className="product-button"
+                        >
                           Voir le produit
-                        </button>
+                        </a>
 
                       </div>
 
@@ -556,7 +663,6 @@ function Iphone() {
               )}
 
             {/* AUCUN PRODUIT */}
-
             {!loading &&
               !error &&
               filteredProducts.length === 0 && (
@@ -574,7 +680,6 @@ function Iphone() {
       </main>
 
       <Footer />
-
     </div>
   )
 }

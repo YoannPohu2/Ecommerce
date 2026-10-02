@@ -14,6 +14,7 @@ import Console from './pages/Console'
 import Watch from './pages/Watch'
 
 import Admin from './pages/Admin'
+import Product from './pages/Product'
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
 
         {/* Administration */}
         <Route path="/admin" element={<Admin />} />
+        <Route path="/product/:id" element={<Product />} />
 
       </Routes>
     </BrowserRouter>
